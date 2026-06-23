@@ -84,6 +84,37 @@ let likedSet = new Set();
 let retweetedSet = new Set();
 let userTweetCount = 0;
 
+const STORAGE_KEY = 'chirp_tweets_v1';
+const LIKES_KEY = 'chirp_likes_v1';
+const RTS_KEY = 'chirp_rts_v1';
+
+function loadFromStorage() {
+  try {
+    const savedTweets = localStorage.getItem(STORAGE_KEY);
+    if (savedTweets) {
+      const parsed = JSON.parse(savedTweets);
+      if (Array.isArray(parsed) && parsed.length) {
+        // Merge: keep seed but put user posts first or append user ones
+        // For simplicity: replace with saved if present (includes seeds at first save)
+        tweets.length = 0;
+        tweets.push(...parsed);
+      }
+    }
+    const savedLikes = localStorage.getItem(LIKES_KEY);
+    if (savedLikes) likedSet = new Set(JSON.parse(savedLikes));
+    const savedRts = localStorage.getItem(RTS_KEY);
+    if (savedRts) retweetedSet = new Set(JSON.parse(savedRts));
+  } catch (e) { /* ignore bad storage */ }
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tweets));
+    localStorage.setItem(LIKES_KEY, JSON.stringify(Array.from(likedSet)));
+    localStorage.setItem(RTS_KEY, JSON.stringify(Array.from(retweetedSet)));
+  } catch (e) {}
+}
+
 // ---------- ICONS ----------
 const ICONS = {
   reply: `<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M21 12c0 4.4-4 8-9 8-1.4 0-2.7-.3-3.9-.8L3 20l1.1-4.3C3.4 14.4 3 13.2 3 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg>`,
@@ -143,6 +174,7 @@ document.getElementById('feed').addEventListener('click', (e) => {
   if(e.target.closest('.like-btn')){
     likedSet.has(id) ? likedSet.delete(id) : likedSet.add(id);
     article.outerHTML = tweetTemplate(tweet);
+    saveToStorage();
   } else if(e.target.closest('.retweet-btn')){
     if(retweetedSet.has(id)){
       retweetedSet.delete(id);
@@ -151,6 +183,7 @@ document.getElementById('feed').addEventListener('click', (e) => {
       showToast("Chirped to your followers ✦");
     }
     article.outerHTML = tweetTemplate(tweet);
+    saveToStorage();
   } else if(e.target.closest('.reply-btn')){
     openComposeModal();
   } else if(e.target.closest('.share-btn')){
@@ -265,6 +298,7 @@ function postNewTweet(text, source = 'inline'){
     closeComposeModal();
   }
 
+  saveToStorage();
   showToast("Your chirp was sent ✦");
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -420,16 +454,14 @@ function initExplore() {
 
 // ---------- INIT (safe) ----------
 function initApp() {
+  loadFromStorage();
   renderFeed();
   renderRightSidebar();
   initExplore();
 
-  // Show home by default (nav already calls setView)
+  // Show home by default
   const homeView = document.getElementById('view-home');
   if (homeView) homeView.classList.remove('hidden');
-
-  // Seed some right sidebar content on home
-  // (already done via renderRightSidebar)
 }
 
 initApp();
