@@ -494,21 +494,63 @@ function renderExploreResults(filter = 'all', query = '') {
   if (!container) return;
 
   const q = query.trim().toLowerCase();
-  const filtered = trends.filter(t => {
+
+  // Trends (filtered by category + query)
+  let html = '';
+  const filteredTrends = trends.filter(t => {
     const catMatch = filter === 'all' || t.tag === filter;
     const qMatch = !q || t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q);
     return catMatch && qMatch;
   });
 
-  container.innerHTML = filtered.length
-    ? filtered.map(t => `
+  if (filteredTrends.length) {
+    html += `<h3 style="padding:8px 12px 4px; font-size:0.95rem; color:var(--text-dim);">Trends</h3>` +
+      filteredTrends.map(t => `
         <div class="trend-item" data-tag="${t.tag}">
           <span class="trend-cat">${t.cat}</span>
           <span class="trend-name">${t.name}</span>
           <span class="trend-count">${t.count}</span>
         </div>
-      `).join('')
-    : `<div class="trend-item"><span class="trend-name">No results</span><span class="trend-count">Try a different search or tab.</span></div>`;
+      `).join('');
+  }
+
+  // Also search actual tweets (real results) — part of AI2 Explore
+  if (q) {
+    const matchingTweets = tweets.filter(tw =>
+      tw.text.toLowerCase().includes(q) ||
+      tw.name.toLowerCase().includes(q) ||
+      tw.handle.toLowerCase().includes(q)
+    ).slice(0, 6);
+
+    if (matchingTweets.length) {
+      html += `<h3 style="padding:12px 12px 4px; font-size:0.95rem; color:var(--text-dim); margin-top:8px;">Posts</h3>`;
+      html += matchingTweets.map(tw => {
+        const liked = likedSet.has(tw.id);
+        const rt = retweetedSet.has(tw.id);
+        return `
+          <article class="tweet" data-id="${tw.id}" style="border-bottom:1px solid var(--border);">
+            <img class="avatar" src="${tw.avatar || `https://i.pravatar.cc/48?u=${tw.id}`}" alt="">
+            <div class="tweet-body">
+              <div class="tweet-meta">
+                <strong>${escapeHtml(tw.name)}</strong>
+                <span class="handle">${tw.handle}</span>
+                <span class="dot">·</span>
+                <span class="time">${tw.time}</span>
+              </div>
+              <div class="tweet-text">${linkify(tw.text)}</div>
+              ${tw.img ? `<img class="tweet-img" src="${tw.img}" alt="" loading="lazy">` : ""}
+              <div class="tweet-actions">
+                <button class="reply-btn">${ICONS.reply}<span>${fmt(tw.replies)}</span></button>
+                <button class="retweet-btn ${rt ? 'retweeted':''}">${ICONS.retweet}<span>${fmt(tw.retweets + (rt?1:0))}</span></button>
+                <button class="like-btn ${liked ? 'liked':''}">${liked ? ICONS.likeFilled : ICONS.like}<span>${fmt(tw.likes + (liked?1:0))}</span></button>
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+    }
+  }
+
+  container.innerHTML = html || (q ? `<div class="trend-item"><span class="trend-name">No posts or trends found</span></div>` : `<div class="trend-item"><span class="trend-name">Search X or pick a category</span></div>`);
 }
 
 // Wire explore tabs (HTML uses data-filter) and search
