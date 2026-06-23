@@ -204,11 +204,14 @@ textarea {
 }
 
 .composer-icons button {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 9999px;
   color: var(--accent);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: var(--transition);
 }
 
@@ -220,10 +223,11 @@ textarea {
   background: var(--accent);
   color: #000;
   font-weight: 700;
-  padding: 8px 24px;
+  padding: 8px 20px;
   border-radius: 9999px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: var(--transition);
+  min-width: 70px;
 }
 
 .post-btn:disabled {
@@ -231,17 +235,21 @@ textarea {
   cursor: not-allowed;
 }
 
+.post-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
 /* ==================== TWEETS ==================== */
 .tweet {
   display: flex;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 0.15s ease;
 }
 
 .tweet:hover {
-  background: var(--card);
+  background: #16181c;
 }
 
 .tweet-body {
@@ -252,15 +260,22 @@ textarea {
 .tweet-meta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   color: var(--text-dim);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   flex-wrap: wrap;
+  font-size: 0.95rem;
 }
 
 .tweet-meta strong {
   color: var(--text);
   font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tweet-meta .handle,
+.tweet-meta .time {
+  font-size: 0.9rem;
 }
 
 .tweet-text {
@@ -375,6 +390,43 @@ textarea {
   max-width: 420px;
   margin-top: 12px;
   color: var(--text-dim);
+}
+
+.tweet-actions button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.tweet-actions button:hover {
+  background: rgba(29, 155, 240, 0.1);
+}
+
+.like-btn.liked {
+  color: var(--like);
+}
+
+.retweet-btn.retweeted {
+  color: var(--retweet);
+}
+
+.reply-btn:hover {
+  color: var(--reply);
+  background: rgba(29, 155, 240, 0.1);
+}
+
+.like-btn:hover {
+  color: var(--like);
+  background: rgba(249, 24, 128, 0.1);
+}
+
+.retweet-btn:hover {
+  color: var(--retweet);
+  background: rgba(0, 186, 124, 0.1);
 }
 
 .action-btn {

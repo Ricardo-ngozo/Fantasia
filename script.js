@@ -185,7 +185,21 @@ document.getElementById('feed').addEventListener('click', (e) => {
     article.outerHTML = tweetTemplate(tweet);
     saveToStorage();
   } else if(e.target.closest('.reply-btn')){
+    // Increment reply count like Twitter
+    tweet.replies = (tweet.replies || 0) + 1;
+    article.outerHTML = tweetTemplate(tweet);
+    saveToStorage();
+
+    // Open composer and prefill with mention (Twitter style)
     openComposeModal();
+    setTimeout(() => {
+      const textField = document.getElementById('modalText') || document.getElementById('inlineText');
+      if (textField) {
+        textField.value = `@${tweet.handle} `;
+        textField.focus();
+        textField.selectionStart = textField.selectionEnd = textField.value.length;
+      }
+    }, 50);
   } else if(e.target.closest('.share-btn')){
     showToast("Link copied ✦");
   }
@@ -376,13 +390,13 @@ function postNewTweet(text, source = 'inline'){
 
   tweets.unshift({
     id: 'u' + Date.now(),
-    name: "Lerato M.",
-    handle: "@lerato_codes",
+    name: "Samukelo Ricardo Ngozo",
+    handle: "@samukelo",
     time: "now",
     text,
     likes: 0, retweets: 0, replies: 0,
     img: attachedImg || null,
-    avatar: "https://i.pravatar.cc/48?img=12"
+    avatar: "https://i.pravatar.cc/48?img=28"
   });
 
   renderFeed();
