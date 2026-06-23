@@ -2,29 +2,11 @@
 
 A vanilla HTML/CSS/JS Twitter/X timeline clone built for the Zaio Project Simulation assignment (100 marks).
 
-<<<<<<< HEAD
 ## Features (all working)
 Base (40 marks): feed, inline+modal composer (char 280), post prepend, like/rt/reply/share/bookmark with counts+states+toasts, nav data-view + mobile, responsive 3col+mobile, persistence localStorage, right sidebar follows+trends.
 Cursor AI (2x10): 1. Media upload+preview+attach to posts (inline+modal). 2. Following tab filter + follow/unfollow from sidebar (persisted, affects For you / Following).
 Manual personal (15 marks): Interactive polls — click 📊 in composer, enter Q + options via prompts (student coded), post attaches poll, votes in feed update live counts + lock per-user, persisted, shown in home/bookmarks/feed. Goofy prompt style for fun.
 Other working: profile edit + save (persisted), bookmarks view, explore (tabs+trend search), notifications stub, edit profile affects sidebar+new posts. All IDs preserved. No delete (was broken). Total JS ~309 lines (script 224 + addl 84). "chirp/chirps" fully renamed to "post/posts" throughout.
-=======
-## Features (current)
-- Fully working Home timeline feed with seed + user posts
-- Inline composer + modal compose (Post button)
-- Live post updates (new posts appear at top)
-- Like, Retweet, Reply, Share interactions (with counts + visual states)
-- Character counter (280) on both composers + warning state
-- Left sidebar nav with icons (Home / Explore / Notifications / Profile)
-- Right sidebar: Trending + Who to follow (follow toggles)
-- Explore view with tabs + live search (over trends)
-- View switching (no page reload)
-- Mobile bottom nav + responsive (icon-only collapsed, full mobile)
-- 4K / large screen friendly (wider max)
-- Persistence via localStorage (your posts, likes, RTs survive refresh)
-- Toast feedback
-- Dark X-like theme
->>>>>>> 1a9351420fdda11bea65590c6eeede194eaec6d2
 
 ## Run locally
 1. Open the folder in VS Code
@@ -37,17 +19,11 @@ Other working: profile edit + save (persisted), bookmarks view, explore (tabs+tr
 - Submit the generated live URL
 
 ## Project structure
-<<<<<<< HEAD
 - `index.html` — markup + views (poll buttons present)
 - `script.js` — core (<=400): feed, composer, media(Cursor), polls(manual+vote), interactions, nav, post, persistence, right follows
 - `additional.js` — moved: edit profile, explore tabs/search, stubs (keeps total JS <=500, script clean)
 - `style.css` — modern X dark + poll styles + responsive
 - All features functional for Zaio 100 marks + Netlify/Loom ready.
-=======
-- `index.html` — markup + views
-- `script.js` — all logic (feed, post, interactions, persistence, views) - keep this readable version!
-- `style.css` — X-accurate dark theme + responsive
->>>>>>> 1a9351420fdda11bea65590c6eeede194eaec6d2
 
 ## JavaScript Compression (for deploy)
 For Netlify or production, compress script.js:
