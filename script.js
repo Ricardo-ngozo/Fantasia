@@ -213,8 +213,16 @@ const inlineText = document.getElementById('inlineText');
 const inlinePostBtn = document.getElementById('inlinePostBtn');
 const openComposeBtn = document.getElementById('openCompose');
 
+const inlineCharCount = document.getElementById('inlineCharCount');
+
 if (inlineText && inlinePostBtn) {
   inlineText.addEventListener('input', () => {
+    const len = inlineText.value.length;
+    const remaining = 280 - len;
+    if (inlineCharCount) {
+      inlineCharCount.textContent = remaining;
+      inlineCharCount.style.color = remaining < 20 ? 'var(--danger)' : 'var(--text-faint)';
+    }
     inlinePostBtn.disabled = inlineText.value.trim().length === 0;
   });
   inlinePostBtn.addEventListener('click', () => postNewTweet(inlineText.value, 'inline'));
