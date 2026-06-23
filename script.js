@@ -3,7 +3,15 @@ const tweets = [
   {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null},
   {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null},
   {id:3,name:"Kamo Digwamaje",handle:"@kamo_dig",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=60"},
-  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null}
+  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null},
+  {id:5,name:"Banele",handle:"@banele",time:"8h",text:"Late night deploys hit different when the tests finally pass. #DevLife",likes:87,retweets:12,replies:5,img:null},
+  {id:6,name:"Enny",handle:"@enny_l",time:"9h",text:"Why does CSS flexbox feel like black magic until it suddenly works? Magic. ✨",likes:312,retweets:55,replies:19,img:"https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=60"},
+  {id:7,name:"Qhawekazi",handle:"@qhawekazi",time:"10h",text:"First time using localStorage for persistence and it actually survived a refresh. Small wins!",likes:156,retweets:29,replies:11,img:null},
+  {id:8,name:"Sfiso",handle:"@sfiso",time:"11h",text:"Building this fake X clone for the assignment. Polls feature is my manual one. Goofy but it works 😂",likes:421,retweets:67,replies:33,img:null},
+  {id:9,name:"Mahlatse",handle:"@mahlatse",time:"12h",text:"Dark mode on everything. My eyes thank me every night. Who still uses light theme in 2026?",likes:703,retweets:134,replies:47,img:null},
+  {id:10,name:"Jael",handle:"@jael_codes",time:"13h",text:"Cursor AI suggestions are wild sometimes but I keep the best ones. Ship fast, fix later.",likes:89,retweets:15,replies:7,img:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=60"},
+  {id:11,name:"Dido",handle:"@dido",time:"14h",text:"Netlify deploy went smooth. Zero drama this time. Feeling blessed. #Netlify",likes:234,retweets:41,replies:18,img:null},
+  {id:12,name:"Bea",handle:"@bea",time:"15h",text:"Just realized how many times I say 'just' in my code comments. Just fix it later. Just one more thing.",likes:178,retweets:22,replies:14,img:null}
 ];
 const trends = [
   {cat:"Technology · Trending",name:"#JavaScript",count:"84.2K posts",tag:"tech"},
@@ -18,7 +26,7 @@ const peopleToFollow = [
   {name:"Netlify",handle:"@netlify",img:"https://i.pravatar.cc/48?img=8"}
 ];
 let likedSet = new Set(), retweetedSet = new Set(), followed = new Set(), bookmarked = new Set(), userPollVotes = {};
-let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"https://i.pravatar.cc/48?img=28",bio:"Fullstack web developer | Learning at Kago",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
+let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"https://i.pravatar.cc/48?img=28",bio:"Fullstack web developer | Learning at Zaio",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
 
 const STORAGE_KEY = 'post_tweets_v2', LIKES_KEY='post_likes_v2', RTS_KEY='post_rts_v2', POLL_KEY='post_pollvotes_v2', FOL_KEY='post_followed_v2', BM_KEY='post_bookmarks_v2', USER_KEY='post_current_user_v2';
 
