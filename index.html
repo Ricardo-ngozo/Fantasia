@@ -73,9 +73,9 @@
         </header>
 
         <!-- Home Tabs (For you / Following) -->
-        <div class="home-tabs" style="display:flex; border-bottom:1px solid var(--border);">
-          <button class="home-tab active" data-tab="foryou" style="flex:1; padding:14px; background:none; border:none; color:var(--text); font-weight:700; border-bottom:2px solid var(--accent);">For you</button>
-          <button class="home-tab" data-tab="following" style="flex:1; padding:14px; background:none; border:none; color:var(--text-dim); font-weight:700;">Following</button>
+        <div class="home-tabs">
+          <button class="home-tab active" data-tab="foryou">For you</button>
+          <button class="home-tab" data-tab="following">Following</button>
         </div>
 
         <!-- Composer -->
@@ -243,30 +243,30 @@
 
   <!-- Edit Profile Modal -->
   <div class="modal-overlay hidden" id="editProfileOverlay">
-    <div class="modal" style="max-width: 400px;">
+    <div class="modal edit-profile-modal">
       <div class="modal-header">
         <button class="modal-close" id="closeEditProfile">✕</button>
         <strong>Edit profile</strong>
       </div>
-      <div class="modal-body" style="padding: 16px;">
-        <div style="margin-bottom:12px;">
-          <label style="display:block; font-size:0.8rem; color:var(--text-dim);">Name</label>
-          <input id="editName" type="text" style="width:100%; padding:8px; background:#000; color:#fff; border:1px solid #333; border-radius:4px;">
+      <div class="modal-body">
+        <div class="edit-field">
+          <label>Name</label>
+          <input id="editName" type="text">
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="display:block; font-size:0.8rem; color:var(--text-dim);">Bio</label>
-          <textarea id="editBio" rows="3" style="width:100%; padding:8px; background:#000; color:#fff; border:1px solid #333; border-radius:4px;"></textarea>
+        <div class="edit-field">
+          <label>Bio</label>
+          <textarea id="editBio" rows="3"></textarea>
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="display:block; font-size:0.8rem; color:var(--text-dim);">Location</label>
-          <input id="editLocation" type="text" style="width:100%; padding:8px; background:#000; color:#fff; border:1px solid #333; border-radius:4px;">
+        <div class="edit-field">
+          <label>Location</label>
+          <input id="editLocation" type="text">
         </div>
-        <div>
-          <label style="display:block; font-size:0.8rem; color:var(--text-dim);">Website</label>
-          <input id="editWebsite" type="text" style="width:100%; padding:8px; background:#000; color:#fff; border:1px solid #333; border-radius:4px;">
+        <div class="edit-field">
+          <label>Website</label>
+          <input id="editWebsite" type="text">
         </div>
       </div>
-      <div class="modal-footer" style="justify-content:flex-end;">
+      <div class="modal-footer">
         <button id="saveEditProfile" class="post-btn">Save</button>
       </div>
     </div>

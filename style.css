@@ -81,6 +81,12 @@ textarea {
   overflow-y: auto;
 }
 
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .logo {
   padding: 12px 16px;
   display: flex;
@@ -106,9 +112,9 @@ textarea {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 14px 20px;
+  padding: 12px 16px;
   border-radius: 9999px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text);
   text-decoration: none;
   transition: var(--transition);
@@ -127,11 +133,11 @@ textarea {
   background: var(--accent);
   color: #000;
   font-weight: 700;
-  font-size: 1.1rem;
-  padding: 16px 0;
+  font-size: 1rem;
+  padding: 12px 32px;
   border-radius: 9999px;
-  width: 90%;
-  margin: 24px auto 0;
+  width: auto;
+  margin: 16px 12px 0;
   display: block;
   text-align: center;
   transition: var(--transition);
@@ -162,8 +168,8 @@ textarea {
 }
 
 .main-header {
-  padding: 16px 20px;
-  font-size: 1.35rem;
+  padding: 12px 16px;
+  font-size: 1.25rem;
   font-weight: 700;
   border-bottom: 1px solid var(--border);
   position: sticky;
@@ -177,8 +183,14 @@ textarea {
 .composer {
   display: flex;
   gap: 16px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
+}
+
+.composer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .composer textarea {
@@ -189,13 +201,16 @@ textarea {
   font-size: 1.25rem;
   outline: none;
   min-height: 70px;
+  padding-bottom: 8px;
 }
 
 .composer-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
 
 .composer-icons {
@@ -217,6 +232,25 @@ textarea {
 
 .composer-icons button:hover {
   background: rgba(29, 155, 240, 0.1);
+}
+
+.char-count {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+}
+
+.dot {
+  color: var(--text-dim);
+}
+
+.tag {
+  color: var(--accent);
+}
+
+.me-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
 }
 
 .post-btn {
@@ -249,7 +283,7 @@ textarea {
 }
 
 .tweet:hover {
-  background: #16181c;
+  background: var(--card);
 }
 
 .tweet-body {
@@ -357,6 +391,38 @@ textarea {
   background: var(--card);
 }
 
+.edit-profile-modal {
+  max-width: 400px;
+}
+
+.edit-field {
+  margin-bottom: 12px;
+}
+
+.edit-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.edit-field input,
+.edit-field textarea {
+  width: 100%;
+  padding: 8px;
+  background: #000;
+  color: var(--text);
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.edit-field textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
 .profile-bio {
   margin: 12px 0;
 }
@@ -429,28 +495,7 @@ textarea {
   background: rgba(0, 186, 124, 0.1);
 }
 
-.action-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 0.95rem;
-}
 
-.action-btn:hover {
-  background: rgba(29, 155, 240, 0.1);
-}
-
-.action-btn.liked {
-  color: var(--like);
-}
-
-.action-btn.retweeted {
-  color: var(--retweet);
-}
 
 /* ==================== RIGHT SIDEBAR ==================== */
 .right-sidebar {
@@ -464,8 +509,8 @@ textarea {
 .search-box {
   background: var(--card);
   border-radius: 9999px;
-  padding: 12px 20px;
-  margin-bottom: 16px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
   transition: var(--transition);
 }
 
@@ -488,19 +533,48 @@ textarea {
 }
 
 .panel h2 {
-  padding: 16px 20px 8px;
+  padding: 12px 16px 8px;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .trend-item, .follow-item {
-  padding: 12px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 0.15s ease;
 }
 
 .trend-item:hover, .follow-item:hover {
-  background: #1f2529;
+  background: var(--card);
+}
+
+.trend-cat {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  display: block;
+}
+
+.trend-name {
+  font-weight: 700;
+  display: block;
+}
+
+.trend-count {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.notifications-list {
+  padding: 0 16px;
+}
+
+.notifications-list:empty::after {
+  content: "No notifications yet";
+  display: block;
+  padding: 40px 20px;
+  color: var(--text-dim);
+  text-align: center;
 }
 
 /* ==================== MODAL ==================== */
@@ -538,6 +612,44 @@ textarea {
   overflow: hidden;
   box-shadow: var(--shadow-md);
   animation: modalPop 0.25s ease;
+}
+
+.modal-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-body {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.modal-footer {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.modal-close {
+  font-size: 1.2rem;
+  padding: 8px;
+  border-radius: 9999px;
+}
+
+.modal-close:hover {
+  background: var(--card);
+}
+
+.modal-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 @keyframes modalPop {
@@ -706,24 +818,12 @@ textarea:focus-visible {
   background: var(--card);
 }
 
-/* Better composer polish for Twitter feel */
-.composer {
-  padding: 12px 16px;
-}
-
-.composer textarea {
-  font-size: 1.3rem;
-}
-
-.modal textarea {
-  font-size: 1.2rem;
-}
-
 /* Delete button style */
 .delete-btn {
   color: #f91880;
   opacity: 0.7;
 }
+
 .delete-btn:hover {
   opacity: 1;
   background: rgba(249, 24, 128, 0.1);
@@ -805,9 +905,46 @@ textarea:focus-visible {
   cursor: default;
 }
 
+/* Explore polish */
+.explore-content {
+  padding: 0 16px;
+}
+
+.explore-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.explore-tab {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.explore-tab.active {
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+}
+
+.explore-tab:hover {
+  background: var(--card);
+}
+
 /* Composer icon polish */
 .composer-icons button,
 .modal-footer .composer-icons button {
   border: none;
   background: transparent;
+}
+
+/* Ensure consistent tweet actions */
+.tweet-actions button svg {
+  width: 18px;
+  height: 18px;
 }
