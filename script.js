@@ -72,17 +72,78 @@ function linkify(t){return escapeHtml(t).replace(/#(\w+)/g,'<span class="tag">#$
 function fmt(n){return n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'K':n;}
 
 let pendingInlinePoll=null, pendingModalPoll=null;
-function createPollFor(source){
-  const q = prompt('Poll question (your manual feature)?');
-  if(!q) return;
-  const os = prompt('2-4 options, comma sep:','Yes,No,Maybe');
-  if(!os) return;
-  const opts = os.split(',').map(x=>x.trim()).filter(Boolean).slice(0,4);
-  if(opts.length<2){alert('Need 2+ options');return;}
-  const p = {question:q, options:opts, votes:opts.map(()=>0)};
-  if(source==='inline') pendingInlinePoll = p; else pendingModalPoll = p;
-  showToast('Poll attached 📊 Post to share it!');
+
+function showPollCreator(source) {
+  const isInline = source === 'inline';
+  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
+  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
+  if (attached) attached.classList.add('hidden');
+  if (creator) {
+    creator.classList.remove('hidden');
+    // clear previous inputs for fresh poll
+    const inputs = creator.querySelectorAll('input');
+    inputs.forEach(i => i.value = '');
+  }
 }
+
+function attachPoll(source, silent) {
+  const isInline = source === 'inline';
+  const qEl = document.getElementById(isInline ? 'inlinePollQ' : 'modalPollQ');
+  const creatorSel = isInline ? '#inlinePollCreator' : '#modalPollCreator';
+  const optsEls = document.querySelectorAll(creatorSel + ' .popt');
+  const question = (qEl ? qEl.value : '').trim();
+  const opts = Array.from(optsEls).map(el => el.value.trim()).filter(Boolean).slice(0,4);
+  if (!question || opts.length < 2) { if (!silent) alert('Need a question + at least 2 options'); return; }
+  const p = {question, options: opts, votes: opts.map(()=>0)};
+  if (isInline) pendingInlinePoll = p; else pendingModalPoll = p;
+  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
+  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
+  if (attached) {
+    attached.innerHTML = `📊 ${question} <span class="remove" data-src="${source}">✕</span>`;
+    attached.classList.remove('hidden');
+  }
+  if (creator) creator.classList.add('hidden');
+  if (!silent) showToast('Poll attached! Now post it.');
+}
+
+function removePoll(source) {
+  const isInline = source === 'inline';
+  if (isInline) pendingInlinePoll = null; else pendingModalPoll = null;
+  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
+  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
+  if (attached) attached.classList.add('hidden');
+  if (creator) creator.classList.add('hidden');
+}
+
+function clearPolls() {
+  pendingInlinePoll = null;
+  pendingModalPoll = null;
+  const els = ['inlinePollCreator','inlinePollAttached','modalPollCreator','modalPollAttached'];
+  els.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+}
+
+// wire poll buttons + creators
+const ipb = document.getElementById('inlinePollBtn');
+const mpb = document.getElementById('modalPollBtn');
+if (ipb) ipb.addEventListener('click', () => showPollCreator('inline'));
+if (mpb) mpb.addEventListener('click', () => showPollCreator('modal'));
+
+// attach / cancel / remove (delegated)
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (t.classList.contains('attach')) {
+    attachPoll(t.dataset.src);
+  } else if (t.classList.contains('cancel')) {
+    const c = document.getElementById(t.dataset.src==='inline' ? 'inlinePollCreator' : 'modalPollCreator');
+    if (c) c.classList.add('hidden');
+  } else if (t.classList.contains('remove') || t.closest('.remove')) {
+    const r = t.dataset.src || t.closest('.remove')?.dataset.src;
+    if (r) removePoll(r);
+  }
+});
 
 function tweetTemplate(t){
   const liked=likedSet.has(t.id), rt=retweetedSet.has(t.id), bm=bookmarked.has(t.id);
@@ -168,7 +229,7 @@ setView('home');
 
 const inlineText=document.getElementById('inlineText'), inlinePostBtn=document.getElementById('inlinePostBtn'), inlineChar=document.getElementById('inlineCharCount');
 if(inlineText&&inlinePostBtn){
-  inlineText.addEventListener('input',()=>{ const r=280-inlineText.value.length; if(inlineChar){inlineChar.textContent=r; inlineChar.style.color=r<20?'var(--danger)':'var(--text-faint)';} inlinePostBtn.disabled=!inlineText.value.trim(); if(!inlineText.value.trim()) pendingInlinePoll=null; });
+  inlineText.addEventListener('input',()=>{ const r=280-inlineText.value.length; if(inlineChar){inlineChar.textContent=r; inlineChar.style.color=r<20?'var(--danger)':'var(--text-faint)';} inlinePostBtn.disabled=!inlineText.value.trim(); if(!inlineText.value.trim()) clearPolls(); });
   inlinePostBtn.addEventListener('click',()=>postNewTweet(inlineText.value,'inline'));
 }
 const inlinePollBtn=document.getElementById('inlinePollBtn'), modalPollBtn=document.getElementById('modalPollBtn');
@@ -190,13 +251,21 @@ function clrImg(s){ if(s==='inline'){inlineImg=null; const p=document.getElement
 
 function postNewTweet(txt,src='inline'){
   txt=(txt||'').trim(); if(!txt) return;
+  // easy poll: auto-attach if creator form is open
+  if (src==='inline' && !pendingInlinePoll) {
+    const c = document.getElementById('inlinePollCreator');
+    if (c && !c.classList.contains('hidden')) { try { attachPoll('inline', true); } catch(e){} }
+  } else if (src==='modal' && !pendingModalPoll) {
+    const c = document.getElementById('modalPollCreator');
+    if (c && !c.classList.contains('hidden')) { try { attachPoll('modal', true); } catch(e){} }
+  }
   const img = getImg(src); const poll = src==='inline'?pendingInlinePoll:pendingModalPoll;
   tweets.unshift({id:'u'+Date.now(), name:currentUser.name, handle:currentUser.handle, time:'now', text:txt, likes:0,retweets:0,replies:0, img:img||null, avatar:currentUser.avatar, poll:poll||null });
   renderFeed();
   if(src==='inline'){
-    if(inlineText) inlineText.value=''; if(inlinePostBtn) inlinePostBtn.disabled=true; clrImg('inline'); pendingInlinePoll=null;
+    if(inlineText) inlineText.value=''; if(inlinePostBtn) inlinePostBtn.disabled=true; clrImg('inline'); clearPolls();
   } else {
-    const mt=document.getElementById('modalText'); if(mt)mt.value=''; const mp=document.getElementById('modalPostBtn'); if(mp)mp.disabled=true; const cc=document.getElementById('charCount'); if(cc)cc.textContent='280'; clrImg('modal'); pendingModalPoll=null; closeComposeModal();
+    const mt=document.getElementById('modalText'); if(mt)mt.value=''; const mp=document.getElementById('modalPostBtn'); if(mp)mp.disabled=true; const cc=document.getElementById('charCount'); if(cc)cc.textContent='280'; clrImg('modal'); clearPolls(); closeComposeModal();
   }
   saveToStorage(); showToast('Posted ✦'); window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -204,13 +273,13 @@ function postNewTweet(txt,src='inline'){
 // Modal compose
 const overlay=document.getElementById('modalOverlay'), modalText=document.getElementById('modalText'), modalPost=document.getElementById('modalPostBtn'), ccEl=document.getElementById('charCount'), closeM=document.getElementById('closeModal'), openC=document.getElementById('openCompose');
 function openComposeModal(){ if(overlay){overlay.classList.remove('hidden'); if(modalText)modalText.focus(); document.body.style.overflow='hidden';} }
-function closeComposeModal(){ if(overlay){overlay.classList.add('hidden'); document.body.style.overflow=''; pendingModalPoll=null;} }
+function closeComposeModal(){ if(overlay){overlay.classList.add('hidden'); document.body.style.overflow=''; clearPolls();} }
 if(openC) openC.addEventListener('click',openComposeModal);
 if(closeM) closeM.addEventListener('click',closeComposeModal);
 if(overlay) overlay.addEventListener('click',e=>{if(e.target===overlay)closeComposeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay&&!overlay.classList.contains('hidden'))closeComposeModal();});
 if(modalText&&modalPost&&ccEl){
-  modalText.addEventListener('input',()=>{ const r=280-modalText.value.length; ccEl.textContent=r; ccEl.style.color=r<20?'var(--danger)':'var(--text-faint)'; modalPost.disabled=!modalText.value.trim(); if(!modalText.value.trim()) pendingModalPoll=null; });
+  modalText.addEventListener('input',()=>{ const r=280-modalText.value.length; ccEl.textContent=r; ccEl.style.color=r<20?'var(--danger)':'var(--text-faint)'; modalPost.disabled=!modalText.value.trim(); if(!modalText.value.trim()) clearPolls(); });
   modalPost.addEventListener('click',()=>postNewTweet(modalText.value,'modal'));
 }
 

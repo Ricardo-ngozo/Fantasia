@@ -100,6 +100,21 @@
 
             <div id="inlineImagePreview" class="image-preview-container"></div>
 
+            <div id="inlinePollCreator" class="poll-creator hidden">
+              <input id="inlinePollQ" placeholder="Poll question?">
+              <input placeholder="Option 1" class="popt">
+              <input placeholder="Option 2" class="popt">
+              <input placeholder="Option 3 (opt)" class="popt">
+              <input placeholder="Option 4 (opt)" class="popt">
+              <div class="poll-form-actions">
+                <button type="button" class="pbtn cancel" data-src="inline">Cancel</button>
+                <button type="button" class="pbtn attach" data-src="inline">Attach Poll</button>
+              </div>
+            </div>
+            <div id="inlinePollAttached" class="poll-attached hidden">
+              📊 Poll attached <span class="remove" data-src="inline">✕</span>
+            </div>
+
             <div class="composer-actions">
               <div class="composer-icons">
                 <button class="image-btn" id="inlineImageBtn" title="Add image">🖼️</button>
@@ -231,6 +246,21 @@
         <div>
           <textarea id="modalText" placeholder="What is happening?!" rows="6"></textarea>
           <div id="modalImagePreview" class="image-preview-container"></div>
+
+          <div id="modalPollCreator" class="poll-creator hidden">
+            <input id="modalPollQ" placeholder="Poll question?">
+            <input placeholder="Option 1" class="popt">
+            <input placeholder="Option 2" class="popt">
+            <input placeholder="Option 3 (opt)" class="popt">
+            <input placeholder="Option 4 (opt)" class="popt">
+            <div class="poll-form-actions">
+              <button type="button" class="pbtn cancel" data-src="modal">Cancel</button>
+              <button type="button" class="pbtn attach" data-src="modal">Attach Poll</button>
+            </div>
+          </div>
+          <div id="modalPollAttached" class="poll-attached hidden">
+            📊 Poll attached <span class="remove" data-src="modal">✕</span>
+          </div>
         </div>
       </div>
 

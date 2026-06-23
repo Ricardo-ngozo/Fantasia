@@ -1129,3 +1129,37 @@ textarea:focus-visible {
   color: var(--text-dim);
   font-size: 0.85rem;
 }
+
+/* Poll creator for easy posting (manual feature) */
+.poll-creator {
+  margin-top: 8px;
+  padding: 10px;
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.poll-creator input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+  padding: 6px 8px;
+  background: #000;
+  border: 1px solid #333;
+  color: var(--text);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+.poll-creator .popt { font-size: 0.85rem; }
+.poll-form-actions { margin-top: 6px; display: flex; gap: 8px; }
+.pbtn { font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; }
+.pbtn.attach { background: var(--accent); color: #000; border-color: var(--accent); }
+.poll-attached {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.poll-attached .remove { cursor: pointer; color: var(--danger); font-weight: bold; }
+.poll-attached.hidden, .poll-creator.hidden { display: none; }
