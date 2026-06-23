@@ -261,11 +261,92 @@ if (inlineText && inlinePostBtn) {
   inlinePostBtn.addEventListener('click', () => postNewTweet(inlineText.value, 'inline'));
 }
 
+// ---------- MEDIA ATTACHMENTS (AI Feature 1) ----------
+// Supports single image per post for simplicity (easy to extend to array)
+// Preview + remove for both inline and modal. Uses dataURL for demo (no server).
+
+let inlineSelectedImage = null;   // dataURL or null
+let modalSelectedImage = null;
+
+function setupImageUpload(btnId, inputId, previewId, onSelect) {
+  const btn = document.getElementById(btnId);
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  if (!btn || !input || !preview) return;
+
+  btn.addEventListener('click', () => input.click());
+
+  input.addEventListener('change', () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please choose an image file');
+      input.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      onSelect(e.target.result, preview);
+    };
+    reader.readAsDataURL(file);
+    input.value = ''; // allow same file again later
+  });
+}
+
+function setPreview(previewEl, dataUrl, clearFn) {
+  previewEl.innerHTML = `
+    <img class="image-preview" src="${dataUrl}" alt="preview">
+    <button class="remove-image-btn" title="Remove image">✕</button>
+  `;
+  const removeBtn = previewEl.querySelector('.remove-image-btn');
+  removeBtn.addEventListener('click', () => {
+    previewEl.innerHTML = '';
+    clearFn();
+  });
+}
+
+function clearInlineImage() {
+  inlineSelectedImage = null;
+}
+function clearModalImage() {
+  modalSelectedImage = null;
+}
+
+// Wire inline
+const inlinePreview = document.getElementById('inlineImagePreview');
+setupImageUpload('inlineImageBtn', 'inlineFileInput', 'inlineImagePreview', (dataUrl, previewEl) => {
+  inlineSelectedImage = dataUrl;
+  setPreview(previewEl, dataUrl, () => { inlineSelectedImage = null; });
+});
+
+// Wire modal (HTML already has the preview container)
+const modalPreview = document.getElementById('modalImagePreview');
+setupImageUpload('modalImageBtn', 'modalFileInput', 'modalImagePreview', (dataUrl, previewEl) => {
+  modalSelectedImage = dataUrl;
+  setPreview(previewEl, dataUrl, () => { modalSelectedImage = null; });
+});
+
+function getCurrentImageFor(source) {
+  return source === 'inline' ? inlineSelectedImage : modalSelectedImage;
+}
+
+function clearImageFor(source) {
+  if (source === 'inline') {
+    inlineSelectedImage = null;
+    if (inlinePreview) inlinePreview.innerHTML = '';
+  } else {
+    modalSelectedImage = null;
+    if (modalPreview) modalPreview.innerHTML = '';
+  }
+}
+
 function postNewTweet(text, source = 'inline'){
   text = text.trim();
   if(!text) return;
 
   userTweetCount++;
+  const attachedImg = getCurrentImageFor(source);
+
   tweets.unshift({
     id: 'u' + Date.now(),
     name: "Lerato M.",
@@ -273,24 +354,25 @@ function postNewTweet(text, source = 'inline'){
     time: "now",
     text,
     likes: 0, retweets: 0, replies: 0,
-    img: null,
+    img: attachedImg || null,
     avatar: "https://i.pravatar.cc/48?img=12"
   });
 
   renderFeed();
 
-  // Clear appropriate source
+  // Clear text + image for source
   if (source === 'inline' && inlineText) {
     inlineText.value = '';
     if (inlinePostBtn) inlinePostBtn.disabled = true;
+    clearImageFor('inline');
   } else {
-    // modal source
     const modalT = document.getElementById('modalText');
     if (modalT) modalT.value = '';
     const modalBtn = document.getElementById('modalPostBtn');
     if (modalBtn) modalBtn.disabled = true;
     const countEl = document.getElementById('charCount');
     if (countEl) countEl.textContent = '280';
+    clearImageFor('modal');
   }
 
   // Only close modal if it was the source

@@ -74,9 +74,12 @@
           <div class="composer-content">
             <textarea id="inlineText" placeholder="What is happening?!" rows="2"></textarea>
 
+            <div id="inlineImagePreview" class="image-preview-container"></div>
+
             <div class="composer-actions">
               <div class="composer-icons">
-                <button class="image-btn" title="Add image">🖼️</button>
+                <button class="image-btn" id="inlineImageBtn" title="Add image">🖼️</button>
+                <input type="file" id="inlineFileInput" accept="image/*" hidden>
               </div>
               <div style="display:flex; align-items:center; gap:12px;">
                 <span class="char-count" id="inlineCharCount">280</span>
@@ -198,7 +201,8 @@
 
       <div class="modal-footer">
         <div class="composer-icons">
-          <button class="image-btn" title="Add image">🖼️</button>
+          <button class="image-btn" id="modalImageBtn" title="Add image">🖼️</button>
+          <input type="file" id="modalFileInput" accept="image/*" hidden>
           <button title="Create poll">📊</button>
           <button title="Add emoji">😊</button>
         </div>
