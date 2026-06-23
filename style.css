@@ -373,6 +373,16 @@ textarea {
   animation: fadeIn 0.2s ease;
 }
 
+/* Fix for modal not hiding when .hidden is added */
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+/* General hidden utility (helps toast, views, etc.) */
+.hidden {
+  display: none !important;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
