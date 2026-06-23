@@ -18,6 +18,7 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass: rgba(22, 24, 28, 0.8);
 }
 
 /* ==================== RESET & BASE ==================== */
@@ -64,11 +65,12 @@ textarea {
 /* ==================== LAYOUT ==================== */
 .app {
   display: grid;
-  grid-template-columns: 275px 1fr 380px;
-  max-width: 1480px;
+  grid-template-columns: 260px 1fr 350px;
+  max-width: 1280px;
   margin: 0 auto;
   min-height: 100vh;
   padding: 0 12px;
+  gap: 0;
 }
 
 /* ==================== SIDEBAR ==================== */
@@ -77,35 +79,43 @@ textarea {
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: 12px 8px;
+  padding: 0 12px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-inner {
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 12px 0;
 }
 
 .logo {
   padding: 12px 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: #fff;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   transition: var(--transition);
+  width: fit-content;
+  border-radius: 9999px;
 }
 
 .logo:hover {
   background: var(--card);
-  border-radius: 9999px;
+}
+
+.logo svg {
+  width: 32px;
+  height: 32px;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-bottom: 8px;
 }
 
 .nav-item {
@@ -114,10 +124,11 @@ textarea {
   gap: 20px;
   padding: 12px 16px;
   border-radius: 9999px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--text);
   text-decoration: none;
-  transition: var(--transition);
+  transition: background-color 0.2s ease;
+  position: relative;
 }
 
 .nav-item:hover {
@@ -126,26 +137,37 @@ textarea {
 
 .nav-item.active {
   font-weight: 700;
-  color: var(--text);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 6px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
 }
 
 .chirp-btn {
   background: var(--accent);
   color: #000;
   font-weight: 700;
-  font-size: 1rem;
-  padding: 12px 32px;
+  font-size: 1.05rem;
+  padding: 14px 32px;
   border-radius: 9999px;
-  width: auto;
-  margin: 16px 12px 0;
-  display: block;
-  text-align: center;
-  transition: var(--transition);
+  width: 90%;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  font-weight: 700;
 }
 
 .chirp-btn:hover {
   background: var(--accent-hover);
-  transform: translateY(-2px);
 }
 
 .me-card {
@@ -155,16 +177,35 @@ textarea {
   padding: 12px;
   border-radius: 9999px;
   margin-top: auto;
-  transition: var(--transition);
+  transition: background-color 0.2s ease;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .me-card:hover {
   background: var(--card);
 }
 
+.me-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.me-meta strong {
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.me-meta span {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
 /* ==================== MAIN CONTENT ==================== */
 .main {
   border-right: 1px solid var(--border);
+  background: var(--bg);
 }
 
 .main-header {
@@ -174,17 +215,18 @@ textarea {
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: var(--bg);
-  z-index: 10;
+  background: var(--glass);
   backdrop-filter: blur(12px);
+  z-index: 20;
 }
 
 /* ==================== COMPOSER ==================== */
 .composer {
   display: flex;
   gap: 16px;
-  padding: 12px 16px;
+  padding: 16px;
   border-bottom: 1px solid var(--border);
+  background: var(--card);
 }
 
 .composer-content {
@@ -201,21 +243,20 @@ textarea {
   font-size: 1.25rem;
   outline: none;
   min-height: 70px;
-  padding-bottom: 8px;
+  padding: 0;
+  line-height: 1.4;
 }
 
 .composer-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
+  margin-top: 12px;
 }
 
 .composer-icons {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .composer-icons button {
@@ -223,34 +264,15 @@ textarea {
   height: 36px;
   border-radius: 9999px;
   color: var(--accent);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
+  transition: background-color 0.2s ease;
 }
 
 .composer-icons button:hover {
   background: rgba(29, 155, 240, 0.1);
-}
-
-.char-count {
-  color: var(--text-faint);
-  font-size: 0.85rem;
-}
-
-.dot {
-  color: var(--text-dim);
-}
-
-.tag {
-  color: var(--accent);
-}
-
-.me-meta {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
 }
 
 .post-btn {
@@ -260,8 +282,8 @@ textarea {
   padding: 8px 20px;
   border-radius: 9999px;
   font-size: 0.95rem;
-  transition: var(--transition);
-  min-width: 70px;
+  transition: background-color 0.2s ease;
+  min-width: 68px;
 }
 
 .post-btn:disabled {
@@ -279,7 +301,7 @@ textarea {
   gap: 12px;
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
-  transition: background 0.15s ease;
+  transition: background-color 0.2s ease;
 }
 
 .tweet:hover {
@@ -326,9 +348,10 @@ textarea {
   border: 1px solid var(--border);
   max-height: 420px;
   object-fit: cover;
+  display: block;
 }
 
-/* ==================== AVATARS (fix stretching) ==================== */
+/* ==================== AVATARS ==================== */
 .avatar {
   width: 48px;
   height: 48px;
@@ -336,6 +359,7 @@ textarea {
   object-fit: cover;
   flex-shrink: 0;
   background: var(--card);
+  border: 1px solid var(--border);
 }
 
 /* Profile page big avatar */
@@ -507,11 +531,15 @@ textarea {
 }
 
 .search-box {
-  background: var(--card);
+  background: var(--glass);
   border-radius: 9999px;
-  padding: 10px 16px;
-  margin-bottom: 12px;
+  padding: 12px 20px;
+  margin-bottom: 16px;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
 }
 
 .search-box input {
@@ -535,18 +563,18 @@ textarea {
 .panel h2 {
   padding: 12px 16px 8px;
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
 }
 
 .trend-item, .follow-item {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
-  transition: background 0.15s ease;
+  transition: background-color 0.2s ease;
 }
 
 .trend-item:hover, .follow-item:hover {
-  background: var(--card);
+  background: var(--glass);
 }
 
 .trend-cat {
@@ -558,6 +586,7 @@ textarea {
 .trend-name {
   font-weight: 700;
   display: block;
+  margin: 2px 0;
 }
 
 .trend-count {
@@ -769,7 +798,7 @@ textarea {
   }
 }
 
-/* ==================== EXTRA POLISH ==================== */
+/* ==================== MODERN X POLISH ==================== */
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
@@ -777,18 +806,100 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Glassmorphism for cards */
+.panel,
+.composer,
+.modal {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
+/* Tweet card modern styling */
+.tweet {
+  padding: 12px 16px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3f44;
+.tweet:hover {
+  background: rgba(255,255,255, 0.03);
+}
+
+/* Right sidebar search modern */
+.search-box {
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+}
+
+/* Hide scrollbars completely for a clean modern X look (scrolling still works) */
+.sidebar,
+.right-sidebar,
+.main,
+.feed,
+#bookmarksFeed,
+.notifications-list,
+#exploreResults {
+  scrollbar-width: none; /* Firefox */
+}
+
+.sidebar::-webkit-scrollbar,
+.right-sidebar::-webkit-scrollbar,
+.main::-webkit-scrollbar,
+.feed::-webkit-scrollbar,
+#bookmarksFeed::-webkit-scrollbar,
+.notifications-list::-webkit-scrollbar,
+#exploreResults::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+  width: 0;
+  height: 0;
+}
+
+/* Smooth animations */
+.tweet,
+.nav-item,
+.chirp-btn,
+.post-btn,
+.follow-btn,
+.composer,
+.modal {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Better typography */
+.tweet-text {
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+/* Fade in animation for feed */
+.tweet {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal animation */
+.modal {
+  animation: modalPop 0.25s ease;
+}
+
+/* Toast animation */
+.toast {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Responsive improvements */
+@media (max-width: 1200px) {
+  .app {
+    max-width: 100%;
+  }
 }
 
 /* Home tabs polish */
@@ -893,12 +1004,22 @@ textarea:focus-visible {
   border-radius: 9999px;
   font-size: 0.85rem;
   font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.follow-btn:hover {
+  background: rgba(29, 155, 240, 0.1);
 }
 
 .follow-btn.following {
   background: var(--text);
   color: #000;
   border-color: var(--text);
+}
+
+.follow-btn.following:hover {
+  background: #e7e9ea;
+  color: #000;
 }
 
 .trend-item {
