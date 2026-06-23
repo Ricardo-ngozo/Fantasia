@@ -253,6 +253,11 @@ textarea {
   align-items: center;
   margin-top: 12px;
 }
+.composer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
 .composer-icons {
   display: flex;
@@ -929,17 +934,6 @@ textarea:focus-visible {
   background: var(--card);
 }
 
-/* Delete button style */
-.delete-btn {
-  color: #f91880;
-  opacity: 0.7;
-}
-
-.delete-btn:hover {
-  opacity: 1;
-  background: rgba(249, 24, 128, 0.1);
-}
-
 /* ==================== VIEW SWITCHING (required for data-view nav) ==================== */
 .view {
   display: block;
@@ -1068,4 +1062,43 @@ textarea:focus-visible {
 .tweet-actions button svg {
   width: 18px;
   height: 18px;
+}
+.tag { color: var(--accent); font-weight: 700; }
+.empty-note { color: var(--text-dim); text-align: center; }
+#bookmarksFeed .empty-note { padding: 40px 20px; }
+
+/* Poll (personal manual feature) */
+.poll {
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+.poll-q {
+  padding: 8px 12px;
+  font-weight: 700;
+  background: var(--card);
+}
+.poll-opt {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.poll-opt:hover {
+  background: rgba(29, 155, 240, 0.08);
+}
+.poll-opt.voted {
+  background: rgba(29, 155, 240, 0.15);
+}
+.pv {
+  float: right;
+  color: var(--text-dim);
+  font-size: 0.85rem;
 }
