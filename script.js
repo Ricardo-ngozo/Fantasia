@@ -1,4 +1,4 @@
-// X clone | base + Cursor (media + following) + manual polls | script ~225 lines
+// X clone | base + Cursor (media + following) + manual polls
 const tweets = [
   {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null,avatar:"./assests/png"},
   {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null,avatar:"./assests/png (1)"},

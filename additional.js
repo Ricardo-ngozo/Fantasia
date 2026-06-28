@@ -86,5 +86,4 @@ document.querySelectorAll('.nav-item[data-view="notifications"], .mobile-nav a[d
   });
 });
 
-// messages / lists / more are nav-only stubs (switch view, fallback to home content). Ok for assignment UX.
-console.log('%c[additional] loaded — edit + explore + stubs ready (polls in core)', 'color:#555');
+
