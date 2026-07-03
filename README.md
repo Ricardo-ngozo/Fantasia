@@ -1,45 +1,31 @@
-# FakeTwitter — Zaio Solo Twitter Project
+# Fake X - Zaio Solo Project
 
-A vanilla HTML/CSS/JS Twitter/X timeline clone built for the Zaio Project Simulation assignment (100 marks).
+A vanilla HTML/CSS/JavaScript X-style timeline clone for the Zaio Project Simulation assignment.
 
-## Features (all working)
-Base (40 marks): feed, inline+modal composer (char 280), post prepend, like/rt/reply/share/bookmark with counts+states+toasts, nav data-view + mobile, responsive 3col+mobile, persistence localStorage, right sidebar follows+trends.
-Cursor AI (2x10): 1. Media upload+preview+attach to posts (inline+modal). 2. Following tab filter + follow/unfollow from sidebar (persisted, affects For you / Following).
-Manual personal (15 marks): Interactive polls — click 📊 in composer, enter Q + options via prompts (student coded), post attaches poll, votes in feed update live counts + lock per-user, persisted, shown in home/bookmarks/feed. Goofy prompt style for fun.
-Other working: profile edit + save (persisted), bookmarks view, explore (tabs+trend search), notifications stub, edit profile affects sidebar+new posts. All IDs preserved. No delete (was broken). Total JS ~309 lines (script 224 + addl 84). "chirp/chirps" fully renamed to "post/posts" throughout.
+## Highlighted Features
 
-## Run locally
-1. Open the folder in VS Code
-2. Use Live Server extension (or any static server)
-3. Or simply double-click `index.html` (some features like focus may be limited)
+- Core X clone: timeline feed, composer, post prepend, likes, reposts, replies, share, bookmarks, navigation views, profile editing, responsive layout, and localStorage persistence.
+- Cursor-assisted feature: media uploads with preview support for inline and modal posts, plus selected feed posts with image media and placeholder media cards.
+- Cursor-assisted feature: Following tab and follow/unfollow controls that persist and filter the timeline.
+- Manual custom feature: interactive polls. Create a poll from the composer, attach it to a post, vote in the feed, lock one vote per user, and persist poll votes.
 
-## Deploy to Netlify (assignment requirement)
-- Easiest: Drag the entire folder onto https://app.netlify.com/drop
-- Or connect Git repo → Netlify will build automatically (no build step)
-- Submit the generated live URL
+## Run Locally
 
-## Project structure
-- `index.html` — markup + views (poll buttons present)
-- `script.js` — core (<=400): feed, composer, media(Cursor), polls(manual+vote), interactions, nav, post, persistence, right follows
-- `additional.js` — moved: edit profile, explore tabs/search, stubs (keeps total JS <=500, script clean)
-- `style.css` — modern X dark + poll styles + responsive
-- All features functional for Zaio 100 marks + Netlify/Loom ready.
+1. Open this folder in VS Code.
+2. Use Live Server or any static server.
+3. You can also double-click `index.html` for a quick local preview.
 
-## JavaScript Compression (for deploy)
-For Netlify or production, compress script.js:
-- Online: Paste into https://javascript-minifier.com/ and download minified version
-- Or `npx terser script.js -o script.min.js --compress --mangle`
-Then change `<script src="script.js">` to `script.min.js` in index.html
-Keep original script.js for your Loom video and assignment (they want to see your manual code clearly)
+## Project Structure
 
-## Notes for Loom video
-- Base (40) is complete and polished
-- When you implement your manual custom feature, add a short comment block in the code and record yourself building/extending it live
-- Show: post a tweet, like/RT, switch views, mobile emulation, refresh persistence
+- `index.html`: app markup, views, composer controls, right column, and modals.
+- `style.css`: X-style dark layout, responsive rules, media placeholders, poll styling, and right-column footer.
+- `script.js`: feed rendering, composer, Cursor-assisted media handling, manual poll feature, interactions, view switching, and persistence.
+- `additional.js`: profile editing, explore search/tabs, and notification stub.
+- `assests/`: profile images and feed media.
 
-## Custom features implemented
-- Manual (15 marks): full polls (create via 📊 , vote in rendered posts, counts update, persist, re-renders in all views)
-- Cursor-assisted: media + following filter/toggles
-- Base complete. All fixed and working. Use prompts for poll creation (quick demo for Loom, full interactive).
+## Loom Demo Notes
 
-Built with ❤️ for high marks. Good luck!
+- Show a normal post, an image post, and a placeholder media post.
+- Show the poll flow: create options, attach the poll, post it, then vote.
+- Mention the Cursor-assisted media preview work and Following filter.
+- Refresh the page to show localStorage persistence.

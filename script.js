@@ -1,17 +1,16 @@
-// X clone | base + Cursor (media + following) + manual polls
 const tweets = [
-  {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null,avatar:"./assests/png"},
-  {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null,avatar:"./assests/png (1)"},
-  {id:3,name:"Kamo Digwamaje",handle:"@kamo_dig",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"./assests/developer.png",avatar:"./assests/png (2)"},
-  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null,avatar:"./assests/png (3)"},
+  {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null,avatar:"./assests/png",verified:true},
+  {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null,avatar:"./assests/png (1)",verified:true,placeholder:"Launch checklist"},
+  {id:3,name:"Kamo Digwamaje",handle:"@kamo_dig",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"./assests/developer.png",avatar:"./assests/png (2)",verified:true},
+  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null,avatar:"./assests/png (3)",verified:true,placeholder:"Responsive layout pass"},
   {id:5,name:"Banele",handle:"@banele",time:"8h",text:"Late night deploys hit different when the tests finally pass. #DevLife",likes:87,retweets:12,replies:5,img:null,avatar:"./assests/png (4)"},
-  {id:6,name:"Enny",handle:"@enny_l",time:"9h",text:"Why does CSS flexbox feel like black magic until it suddenly works? Magic. ✨",likes:312,retweets:55,replies:19,img:"./assests/developer.png",avatar:"./assests/png (5)"},
-  {id:7,name:"Qhawekazi",handle:"@qhawekazi",time:"10h",text:"First time using localStorage for persistence and it actually survived a refresh. Small wins!",likes:156,retweets:29,replies:11,img:null,avatar:"./assests/png (6)"},
-  {id:8,name:"Sfiso",handle:"@sfiso",time:"11h",text:"Building this fake X clone for the assignment. Polls feature is my manual one. Goofy but it works 😂",likes:421,retweets:67,replies:33,img:null},
-  {id:9,name:"Mahlatse",handle:"@mahlatse",time:"12h",text:"Dark mode on everything. My eyes thank me every night. Who still uses light theme in 2026?",likes:703,retweets:134,replies:47,img:null},
-  {id:10,name:"Jael",handle:"@jael_codes",time:"13h",text:"Cursor AI suggestions are wild sometimes but I keep the best ones. Ship fast, fix later.",likes:89,retweets:15,replies:7,img:"./assests/developer.png"},
-  {id:11,name:"Dido",handle:"@dido",time:"14h",text:"Netlify deploy went smooth. Zero drama this time. Feeling blessed. #Netlify",likes:234,retweets:41,replies:18,img:null},
-  {id:12,name:"Bea",handle:"@bea",time:"15h",text:"Just realized how many times I say 'just' in my code comments. Just fix it later. Just one more thing.",likes:178,retweets:22,replies:14,img:null}
+  {id:6,name:"Enny",handle:"@enny_l",time:"9h",text:"Why does CSS flexbox feel like black magic until it suddenly works? Magic. ✨",likes:312,retweets:55,replies:19,img:"./assests/developer.png",avatar:"./assests/png (5)",verified:true},
+  {id:7,name:"Qhawekazi",handle:"@qhawekazi",time:"10h",text:"First time using localStorage for persistence and it actually survived a refresh. Small wins!",likes:156,retweets:29,replies:11,img:null,avatar:"./assests/png (6)",poll:{question:"Best feature in this clone?",options:["Polls","Images","Bookmarks"],votes:[12,8,5]}},
+  {id:8,name:"Sfiso",handle:"@sfiso",time:"11h",text:"Building this fake X clone for the assignment. Polls feature is my manual one. Goofy but it works 😂",likes:421,retweets:67,replies:33,img:null,avatar:"./assests/png (7)"},
+  {id:9,name:"Mahlatse",handle:"@mahlatse",time:"12h",text:"Dark mode on everything. My eyes thank me every night. Who still uses light theme in 2026?",likes:703,retweets:134,replies:47,img:null,avatar:"./assests/png (8)"},
+  {id:10,name:"Jael",handle:"@jael_codes",time:"13h",text:"Cursor AI suggestions are wild sometimes but I keep the best ones. Ship fast, fix later.",likes:89,retweets:15,replies:7,img:"./assests/developer.png",avatar:"./assests/png (9)"},
+  {id:11,name:"Dido",handle:"@dido",time:"14h",text:"Netlify deploy went smooth. Zero drama this time. Feeling blessed. #Netlify",likes:234,retweets:41,replies:18,img:null,avatar:"./assests/png (10)"},
+  {id:12,name:"Bea",handle:"@bea",time:"15h",text:"Just realized how many times I say 'just' in my code comments. Just fix it later. Just one more thing.",likes:178,retweets:22,replies:14,img:null,avatar:"./assests/png (11)"}
 ];
 const trends = [
   {cat:"Technology · Trending",name:"#JavaScript",count:"84.2K posts",tag:"tech"},
@@ -21,9 +20,9 @@ const trends = [
   {cat:"Trending",name:"#CursorAI",count:"27.1K posts",tag:"tech"}
 ];
 const peopleToFollow = [
-  {name:"Cursor",handle:"@cursor_ai",img:"./assests/png (2)"},
-  {name:"Kago",handle:"@kago",img:"./assests/png (4)"},
-  {name:"Netlify",handle:"@netlify",img:"./assests/png (6)"}
+  {name:"Cursor",handle:"@cursor_ai",img:"./assests/png (2)",verified:true},
+  {name:"Kago",handle:"@kago",img:"./assests/png (4)",verified:false},
+  {name:"Netlify",handle:"@netlify",img:"./assests/png (6)",verified:true}
 ];
 let likedSet = new Set(), retweetedSet = new Set(), followed = new Set(), bookmarked = new Set(), userPollVotes = {};
 let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"./assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",bio:"Fullstack web developer | Learning at Zaio",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
@@ -65,7 +64,9 @@ const ICONS = {
   likeFilled:`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.9-10-9.5C.5 7.8 2.6 4 6.3 4c2 0 3.6 1.1 4.5 2.5C11.7 5.1 13.3 4 15.3 4 19 4 21.1 7.8 20.6 11.5 18.1 16.1 12 21 12 21z"/></svg>`,
   share:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 16V4M7 8l5-5 5 5M5 14v5a1 1 0 001 1h12a1 1 0 001-1v-5"/></svg>`,
   bookmark:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`,
-  bookmarkFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`
+  bookmarkFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`,
+  views:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 19V5M10 19V9M16 19v-7M22 19V3"/></svg>`,
+  verified:`<span class="verified-badge" title="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>`
 };
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function linkify(t){return escapeHtml(t).replace(/#(\w+)/g,'<span class="tag">#$1</span>');}
@@ -80,7 +81,6 @@ function showPollCreator(source) {
   if (attached) attached.classList.add('hidden');
   if (creator) {
     creator.classList.remove('hidden');
-    // clear previous inputs for fresh poll
     const inputs = creator.querySelectorAll('input');
     inputs.forEach(i => i.value = '');
   }
@@ -125,13 +125,12 @@ function clearPolls() {
   });
 }
 
-// wire poll buttons + creators
+// FEATURE: custom poll creator, attach, and voting flow.
 const ipb = document.getElementById('inlinePollBtn');
 const mpb = document.getElementById('modalPollBtn');
 if (ipb) ipb.addEventListener('click', () => showPollCreator('inline'));
 if (mpb) mpb.addEventListener('click', () => showPollCreator('modal'));
 
-// attach / cancel / remove (delegated)
 document.addEventListener('click', (e) => {
   const t = e.target;
   if (t.classList.contains('attach')) {
@@ -147,6 +146,7 @@ document.addEventListener('click', (e) => {
 
 function tweetTemplate(t){
   const liked=likedSet.has(t.id), rt=retweetedSet.has(t.id), bm=bookmarked.has(t.id);
+  const verified=t.verified ? ICONS.verified : '';
   let phtml='';
   if(t.poll && t.poll.options){
     const vi = userPollVotes[t.id];
@@ -156,14 +156,16 @@ function tweetTemplate(t){
   return `<article class="tweet" data-id="${t.id}">
     <img class="avatar" src="${t.avatar||'./assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png'}" alt="">
     <div class="tweet-body">
-      <div class="tweet-meta"><strong>${escapeHtml(t.name)}</strong> <span class="handle">${t.handle}</span> <span class="dot">·</span> <span class="time">${t.time}</span></div>
+      <div class="tweet-meta"><strong>${escapeHtml(t.name)}</strong>${verified} <span class="handle">${t.handle}</span> <span class="dot">·</span> <span class="time">${t.time}</span><button class="tweet-more" aria-label="More">•••</button></div>
       <div class="tweet-text">${linkify(t.text)}</div>
       ${t.img?`<img class="tweet-img" src="${t.img}" alt="" loading="lazy">`:''}
+      ${!t.img&&t.placeholder?`<div class="tweet-placeholder"><span>${escapeHtml(t.placeholder)}</span></div>`:''}
       ${phtml}
       <div class="tweet-actions">
         <button class="reply-btn">${ICONS.reply}<span>${fmt(t.replies||0)}</span></button>
         <button class="retweet-btn ${rt?'retweeted':''}">${ICONS.retweet}<span>${fmt((t.retweets||0)+(rt?1:0))}</span></button>
         <button class="like-btn ${liked?'liked':''}">${liked?ICONS.likeFilled:ICONS.like}<span>${fmt((t.likes||0)+(liked?1:0))}</span></button>
+        <button class="views-btn">${ICONS.views}<span>${fmt(((t.likes||0) * 120) + 1800)}</span></button>
         <button class="share-btn">${ICONS.share}</button>
         <button class="bookmark-btn">${bm?ICONS.bookmarkFilled:ICONS.bookmark}</button>
       </div>
@@ -184,7 +186,6 @@ function renderBookmarks(){
   c.innerHTML = f.length ? f.map(tweetTemplate).join('') : '<div class="empty-note">No bookmarks yet. Tap bookmark on posts.</div>';
 }
 
-// Document delegation for all tweet actions (feed + bookmarks)
 document.addEventListener('click', e => {
   const art = e.target.closest('.tweet'); if(!art) return;
   const raw = art.dataset.id; const tw = tweets.find(x => String(x.id) === String(raw)); if(!tw) return;
@@ -232,11 +233,7 @@ if(inlineText&&inlinePostBtn){
   inlineText.addEventListener('input',()=>{ const r=280-inlineText.value.length; if(inlineChar){inlineChar.textContent=r; inlineChar.style.color=r<20?'var(--danger)':'var(--text-faint)';} inlinePostBtn.disabled=!inlineText.value.trim(); if(!inlineText.value.trim()) clearPolls(); });
   inlinePostBtn.addEventListener('click',()=>postNewTweet(inlineText.value,'inline'));
 }
-const inlinePollBtn=document.getElementById('inlinePollBtn'), modalPollBtn=document.getElementById('modalPollBtn');
-if(inlinePollBtn) inlinePollBtn.addEventListener('click',()=>createPollFor('inline'));
-if(modalPollBtn) modalPollBtn.addEventListener('click',()=>createPollFor('modal'));
-
-// Media (Cursor)
+// CURSOR FEATURE: image upload previews and stored media posts.
 let inlineImg=null, modalImg=null;
 function setupImg(btnId,inId,preId,cb){
   const b=document.getElementById(btnId), inp=document.getElementById(inId), pre=document.getElementById(preId); if(!b||!inp||!pre)return;
@@ -251,7 +248,6 @@ function clrImg(s){ if(s==='inline'){inlineImg=null; const p=document.getElement
 
 function postNewTweet(txt,src='inline'){
   txt=(txt||'').trim(); if(!txt) return;
-  // easy poll: auto-attach if creator form is open
   if (src==='inline' && !pendingInlinePoll) {
     const c = document.getElementById('inlinePollCreator');
     if (c && !c.classList.contains('hidden')) { try { attachPoll('inline', true); } catch(e){} }
@@ -260,7 +256,7 @@ function postNewTweet(txt,src='inline'){
     if (c && !c.classList.contains('hidden')) { try { attachPoll('modal', true); } catch(e){} }
   }
   const img = getImg(src); const poll = src==='inline'?pendingInlinePoll:pendingModalPoll;
-  tweets.unshift({id:'u'+Date.now(), name:currentUser.name, handle:currentUser.handle, time:'now', text:txt, likes:0,retweets:0,replies:0, img:img||null, avatar:currentUser.avatar, poll:poll||null });
+  tweets.unshift({id:'u'+Date.now(), name:currentUser.name, handle:currentUser.handle, time:'now', text:txt, likes:0,retweets:0,replies:0, img:img||null, avatar:currentUser.avatar, poll:poll||null, verified:true });
   renderFeed();
   if(src==='inline'){
     if(inlineText) inlineText.value=''; if(inlinePostBtn) inlinePostBtn.disabled=true; clrImg('inline'); clearPolls();
@@ -270,7 +266,6 @@ function postNewTweet(txt,src='inline'){
   saveToStorage(); showToast('Posted ✦'); window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Modal compose
 const overlay=document.getElementById('modalOverlay'), modalText=document.getElementById('modalText'), modalPost=document.getElementById('modalPostBtn'), ccEl=document.getElementById('charCount'), closeM=document.getElementById('closeModal'), openC=document.getElementById('openCompose');
 function openComposeModal(){ if(overlay){overlay.classList.remove('hidden'); if(modalText)modalText.focus(); document.body.style.overflow='hidden';} }
 function closeComposeModal(){ if(overlay){overlay.classList.add('hidden'); document.body.style.overflow=''; clearPolls();} }
@@ -283,11 +278,10 @@ if(modalText&&modalPost&&ccEl){
   modalPost.addEventListener('click',()=>postNewTweet(modalText.value,'modal'));
 }
 
-// Right sidebar (trends + follows)
 function renderRightSidebar(){
   const te=document.getElementById('trends'), fe=document.getElementById('followList');
   if(te) te.innerHTML=trends.slice(0,5).map(t=>`<div class="trend-item" data-tag="${t.tag}"><span class="trend-cat">${t.cat}</span><span class="trend-name">${t.name}</span><span class="trend-count">${t.count}</span></div>`).join('');
-  if(fe) fe.innerHTML=peopleToFollow.map((p,i)=>`<div class="follow-item" data-idx="${i}"><img class="avatar" src="${p.img}" alt=""><div class="follow-meta"><strong>${p.name}</strong><span>${p.handle}</span></div><button class="follow-btn ${followed.has(p.handle)?'following':''}">${followed.has(p.handle)?'Following':'Follow'}</button></div>`).join('');
+  if(fe) fe.innerHTML=peopleToFollow.map((p,i)=>`<div class="follow-item" data-idx="${i}"><img class="avatar" src="${p.img}" alt=""><div class="follow-meta"><strong>${p.name}${p.verified?ICONS.verified:''}</strong><span>${p.handle}</span></div><button class="follow-btn ${followed.has(p.handle)?'following':''}">${followed.has(p.handle)?'Following':'Follow'}</button></div>`).join('');
 }
 const flEl=document.getElementById('followList');
 if(flEl) flEl.addEventListener('click',e=>{
@@ -298,7 +292,6 @@ if(flEl) flEl.addEventListener('click',e=>{
   saveToStorage(); if(homeTab==='following') renderFeed();
 });
 
-// Home tabs
 document.querySelectorAll('.home-tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     document.querySelectorAll('.home-tab').forEach(t=>{t.classList.remove('active'); t.style.color='var(--text-dim)'; t.style.borderBottom='';});
@@ -307,7 +300,6 @@ document.querySelectorAll('.home-tab').forEach(tab=>{
   });
 });
 
-// Init
 function initApp(){
   loadFromStorage(); updateProfileUI(); renderFeed(); renderRightSidebar();
   if(followed.size===0){ followed.add('@kago'); followed.add('@genius_mat'); renderRightSidebar(); }
