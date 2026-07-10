@@ -127,7 +127,7 @@ function connectEvents() {
   });
   app.eventSource.addEventListener("typing", (event) => {
     const data = JSON.parse(event.data);
-    if (data.userId !== app.me.id) showTyping(`${app.partner.displayName} is typing...`);
+    if (data.userId !== app.me.id && !app.settings.incognitoTyping) showTyping(`${app.partner.displayName} is typing...`);
   });
   app.eventSource.addEventListener("call", (event) => handleCallSignal(JSON.parse(event.data)));
   app.eventSource.onerror = () => $("#presenceLine").textContent = "Reconnecting...";

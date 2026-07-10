@@ -9,6 +9,20 @@ const uploadDir = path.join(root, "uploads");
 const backupDir = path.join(root, "backups");
 const dbPath = path.join(dataDir, "fantasia-db.json");
 const port = Number(process.env.PORT || 5180);
+const maxAttachmentBytes = 5 * 1024 * 1024;
+const allowedAttachmentMimeTypes = new Set([
+  "image/png",
+  "image/jpeg",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "application/zip",
+  "text/plain",
+  "application/json",
+  "audio/webm",
+  "audio/mpeg",
+  "audio/mp4"
+]);
 
 for (const dir of [dataDir, uploadDir, backupDir]) fs.mkdirSync(dir, { recursive: true });
 
@@ -28,6 +42,14 @@ const mime = {
 
 function now() {
   return new Date().toISOString();
+}
+
+function sanitizeText(value, maxLength = 8000) {
+  return String(value ?? "")
+    .replace(/[\u0000-\u001f]/g, "")
+    .replace(/<[^>]*>/g, "")
+    .slice(0, maxLength)
+    .trim();
 }
 
 function id(prefix) {
@@ -81,6 +103,34 @@ function defaultDb() {
   };
 }
 
+function normalizeUser(user, fallback) {
+  return {
+    id: user?.id || fallback.id,
+    username: String(user?.username || fallback.username).trim().slice(0, 40) || fallback.username,
+    displayName: String(user?.displayName || fallback.displayName).trim().slice(0, 80) || fallback.displayName,
+    avatar: String(user?.avatar || fallback.avatar).trim().slice(0, 400) || fallback.avatar,
+    passwordHash: user?.passwordHash || fallback.passwordHash,
+    createdAt: user?.createdAt || now()
+  };
+}
+
+function ensureDbShape(input) {
+  const fallback = defaultDb();
+  const raw = input && typeof input === "object" ? input : {};
+  const users = Array.isArray(raw.users) ? raw.users : [];
+  return {
+    ...fallback,
+    ...raw,
+    users: [normalizeUser(users[0], fallback.users[0]), normalizeUser(users[1], fallback.users[1])],
+    sessions: Array.isArray(raw.sessions) ? raw.sessions.filter(Boolean) : [],
+    messages: Array.isArray(raw.messages) ? raw.messages : [],
+    stories: Array.isArray(raw.stories) ? raw.stories : [],
+    presence: raw.presence && typeof raw.presence === "object" ? raw.presence : {},
+    settings: { ...fallback.settings, ...(raw.settings && typeof raw.settings === "object" ? raw.settings : {}) },
+    audit: Array.isArray(raw.audit) ? raw.audit.slice(-1000) : []
+  };
+}
+
 function loadDb() {
   if (!fs.existsSync(dbPath)) {
     const db = defaultDb();
@@ -91,11 +141,12 @@ function loadDb() {
     console.log("Change these passwords in the app before exposing it online.");
     return db;
   }
-  return JSON.parse(fs.readFileSync(dbPath, "utf8"));
+  return ensureDbShape(JSON.parse(fs.readFileSync(dbPath, "utf8")));
 }
 
 function saveDb(db) {
-  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+  const payload = ensureDbShape(db);
+  fs.writeFileSync(dbPath, JSON.stringify(payload, null, 2));
 }
 
 let db = loadDb();
@@ -200,15 +251,21 @@ function saveAttachment(file) {
   if (!file?.data || !file?.name) return null;
   const match = String(file.data).match(/^data:([^;]+);base64,(.+)$/);
   if (!match) throw new Error("Invalid attachment.");
-  const type = file.type || match[1] || "application/octet-stream";
-  const safeExt = path.extname(file.name).replace(/[^a-zA-Z0-9.]/g, "") || ".bin";
+  const declaredType = String(file.type || match[1] || "application/octet-stream").toLowerCase();
+  if (!allowedAttachmentMimeTypes.has(declaredType)) throw new Error("Unsupported file type.");
+  const bytes = Buffer.from(match[2], "base64");
+  if (bytes.length > maxAttachmentBytes) throw new Error("Attachment exceeds 5MB.");
+  const safeBase = String(file.name || "attachment")
+    .replace(/[\\/:*?"<>|]/g, "_")
+    .slice(0, 120) || "attachment";
+  const safeExt = path.extname(safeBase).replace(/[^a-zA-Z0-9.]/g, "") || ".bin";
   const fileName = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${safeExt}`;
   const disk = path.join(uploadDir, fileName);
-  fs.writeFileSync(disk, Buffer.from(match[2], "base64"));
+  fs.writeFileSync(disk, bytes);
   return {
     id: id("file"),
-    name: file.name.slice(0, 160),
-    type,
+    name: safeBase.slice(0, 160),
+    type: declaredType,
     size: fs.statSync(disk).size,
     url: `/uploads/${fileName}`,
     createdAt: now()
@@ -247,8 +304,11 @@ async function routeApi(req, res) {
   try {
     if (method === "POST" && url.pathname === "/api/login") {
       const body = await readBody(req);
-      const user = db.users.find((item) => item.username.toLowerCase() === String(body.username || "").toLowerCase());
-      if (!user || !verifyPassword(String(body.password || ""), user.passwordHash)) {
+      const username = String(body.username || "").trim().toLowerCase();
+      const password = String(body.password || "");
+      if (!username || !password) return json(res, 400, { error: "Username and password are required." });
+      const user = db.users.find((item) => item.username.toLowerCase() === username);
+      if (!user || !verifyPassword(password, user.passwordHash)) {
         return json(res, 401, { error: "Wrong username or password." });
       }
       const token = crypto.randomBytes(32).toString("hex");
@@ -316,15 +376,15 @@ async function routeApi(req, res) {
       const createdAt = body.scheduledFor || now();
       const expiresAt = body.timer ? new Date(new Date(createdAt).getTime() + Number(body.timer) * 1000).toISOString() : null;
       const poll = body.poll ? {
-        question: String(body.poll.question || "").slice(0, 240),
-        options: (body.poll.options || []).map((item) => String(item).slice(0, 80)).filter(Boolean).slice(0, 6),
+        question: sanitizeText(body.poll.question, 240),
+        options: (body.poll.options || []).map((item) => sanitizeText(item, 80)).filter(Boolean).slice(0, 6),
         votes: {}
       } : null;
       if (poll) poll.options.forEach((option) => poll.votes[option] = []);
       const message = {
         id: id("msg"),
         senderId: user.id,
-        text: String(body.text || "").slice(0, 8000),
+        text: sanitizeText(body.text, 8000),
         attachments,
         replyTo: body.replyTo || null,
         viewOnce: !!body.viewOnce,
@@ -357,7 +417,7 @@ async function routeApi(req, res) {
         const body = await readBody(req);
         if (typeof body.text === "string") {
           if (message.senderId !== user.id) return json(res, 403, { error: "Only the sender can edit this message." });
-          message.text = body.text.slice(0, 8000);
+          message.text = sanitizeText(body.text, 8000);
           message.editedAt = now();
         }
         if (typeof body.pinned === "boolean") message.pinned = body.pinned;
@@ -416,7 +476,7 @@ async function routeApi(req, res) {
 
     if (method === "POST" && url.pathname === "/api/stories") {
       const body = await readBody(req);
-      const text = String(body.text || "").trim();
+      const text = sanitizeText(body.text, 400);
       if (!text) return json(res, 400, { error: "Story is empty." });
       const story = { id: id("story"), userId: user.id, text: text.slice(0, 400), views: [], createdAt: now(), expiresAt: new Date(Date.now() + 86400000).toISOString() };
       db.stories.unshift(story);
@@ -438,9 +498,11 @@ async function routeApi(req, res) {
 
     if (method === "POST" && url.pathname === "/api/password") {
       const body = await readBody(req);
-      if (!verifyPassword(String(body.oldPassword || ""), user.passwordHash)) return json(res, 403, { error: "Current password is wrong." });
-      if (String(body.newPassword || "").length < 10) return json(res, 400, { error: "Use at least 10 characters." });
-      user.passwordHash = hashPassword(String(body.newPassword));
+      const oldPassword = String(body.oldPassword || "");
+      const newPassword = String(body.newPassword || "");
+      if (!verifyPassword(oldPassword, user.passwordHash)) return json(res, 403, { error: "Current password is wrong." });
+      if (newPassword.length < 10) return json(res, 400, { error: "Use at least 10 characters." });
+      user.passwordHash = hashPassword(newPassword);
       audit(user.id, "password:change");
       saveDb(db);
       return json(res, 200, { ok: true });
@@ -487,6 +549,20 @@ async function routeApi(req, res) {
       audit(user.id, "backup:create", { file: path.basename(file) });
       saveDb(db);
       return json(res, 200, { message: `Backup created: ${path.basename(file)}` });
+    }
+
+    if (method === "POST" && url.pathname === "/api/restore") {
+      const backupFiles = fs.readdirSync(backupDir)
+        .filter((name) => name.endsWith(".json"))
+        .map((name) => path.join(backupDir, name))
+        .sort((left, right) => fs.statSync(right).mtimeMs - fs.statSync(left).mtimeMs);
+      if (!backupFiles.length) return json(res, 404, { error: "No backup files found." });
+      const latestBackup = ensureDbShape(JSON.parse(fs.readFileSync(backupFiles[0], "utf8")));
+      db = latestBackup;
+      saveDb(db);
+      audit(user.id, "backup:restore", { file: path.basename(backupFiles[0]) });
+      broadcast();
+      return json(res, 200, { message: `Restored backup: ${path.basename(backupFiles[0])}` });
     }
 
     if (method === "GET" && url.pathname === "/api/export") {
