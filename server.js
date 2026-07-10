@@ -9,6 +9,7 @@ const uploadDir = path.join(root, "uploads");
 const backupDir = path.join(root, "backups");
 const dbPath = path.join(dataDir, "fantasia-db.json");
 const port = Number(process.env.PORT || 5180);
+const loginAttempts = new Map();
 const maxAttachmentBytes = 5 * 1024 * 1024;
 const allowedAttachmentMimeTypes = new Set([
   "image/png",
@@ -44,6 +45,19 @@ function now() {
   return new Date().toISOString();
 }
 
+function getClientIp(req) {
+  const forwarded = req.headers["x-forwarded-for"];
+  if (typeof forwarded === "string") return forwarded.split(",")[0].trim();
+  return req.socket?.remoteAddress || "unknown";
+}
+
+function applySecurityHeaders(res) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), interest-cohort=()");
+}
+
 function sanitizeText(value, maxLength = 8000) {
   return String(value ?? "")
     .replace(/[\u0000-\u001f]/g, "")
@@ -62,7 +76,9 @@ function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
 }
 
 function verifyPassword(password, stored) {
+  if (!stored || typeof stored !== "string") return false;
   const [salt, hash] = stored.split(":");
+  if (!salt || !hash) return false;
   return crypto.timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(hashPassword(password, salt).split(":")[1], "hex"));
 }
 
@@ -131,6 +147,27 @@ function ensureDbShape(input) {
   };
 }
 
+function pruneExpiredSessions() {
+  db.sessions = db.sessions.filter((item) => new Date(item.expiresAt).getTime() > Date.now());
+}
+
+function applyRateLimit(req, res) {
+  const key = getClientIp(req);
+  const now = Date.now();
+  const entry = loginAttempts.get(key) || { count: 0, resetAt: now + 60_000 };
+  if (now > entry.resetAt) {
+    entry.count = 0;
+    entry.resetAt = now + 60_000;
+  }
+  entry.count += 1;
+  loginAttempts.set(key, entry);
+  if (entry.count > 12) {
+    json(res, 429, { error: "Too many requests. Please try again shortly." });
+    return true;
+  }
+  return false;
+}
+
 function loadDb() {
   if (!fs.existsSync(dbPath)) {
     const db = defaultDb();
@@ -174,6 +211,7 @@ function stateFor(user) {
 }
 
 function json(res, status, data) {
+  applySecurityHeaders(res);
   const body = JSON.stringify(data);
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
@@ -273,6 +311,7 @@ function saveAttachment(file) {
 }
 
 function routeStatic(req, res) {
+  applySecurityHeaders(res);
   const url = new URL(req.url, `http://${req.headers.host}`);
   let pathname = decodeURIComponent(url.pathname);
   if (pathname === "/") pathname = "/index.html";
@@ -285,7 +324,7 @@ function routeStatic(req, res) {
   }
   fs.readFile(file, (err, data) => {
     if (err) {
-      res.writeHead(404);
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
       res.end("Not found");
       return;
     }
@@ -302,7 +341,14 @@ async function routeApi(req, res) {
   const method = req.method;
 
   try {
+    pruneExpiredSessions();
+
+    if (method === "GET" && url.pathname === "/health") {
+      return json(res, 200, { ok: true, uptime: process.uptime(), messages: db.messages.length, stories: db.stories.length });
+    }
+
     if (method === "POST" && url.pathname === "/api/login") {
+      if (applyRateLimit(req, res)) return;
       const body = await readBody(req);
       const username = String(body.username || "").trim().toLowerCase();
       const password = String(body.password || "");
@@ -497,6 +543,7 @@ async function routeApi(req, res) {
     }
 
     if (method === "POST" && url.pathname === "/api/password") {
+      if (applyRateLimit(req, res)) return;
       const body = await readBody(req);
       const oldPassword = String(body.oldPassword || "");
       const newPassword = String(body.newPassword || "");
@@ -594,9 +641,10 @@ setInterval(() => {
 
 const server = http.createServer((req, res) => {
   if (req.url.startsWith("/api/")) routeApi(req, res);
+  else if (req.url === "/health") routeApi(req, res);
   else routeStatic(req, res);
 });
 
-server.listen(port, () => {
-  console.log(`Fantasia is running at http://localhost:${port}`);
+server.listen(port, "0.0.0.0", () => {
+  console.log(`Fantasia is running at http://0.0.0.0:${port}`);
 });
