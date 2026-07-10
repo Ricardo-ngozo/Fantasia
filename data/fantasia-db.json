@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "id": "u_me",
+      "username": "me",
+      "displayName": "Me",
+      "avatar": "/assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",
+      "passwordHash": "496000bae10437c9c8270d14864d3aac:416bc1ce8a6bd4f4f6583c11d81736fee95db694ed1aa2e162aacbd699501a3e",
+      "createdAt": "2026-07-10T13:16:42.980Z"
+    },
+    {
+      "id": "u_partner",
+      "username": "partner",
+      "displayName": "Partner",
+      "avatar": "/assests/png (3)",
+      "passwordHash": "457e26485513791fb8bf4eec47bd32f4:c5d7c07a0d0231dff61b198b7d77c4ea9d4ac23938b4e683bf34281d49e9d6d0",
+      "createdAt": "2026-07-10T13:16:43.296Z"
+    }
+  ],
+  "sessions": [],
+  "messages": [],
+  "stories": [],
+  "presence": {},
+  "settings": {
+    "appLockSetting": false,
+    "screenshotAlerts": true,
+    "hideMedia": false,
+    "incognitoTyping": false,
+    "keyFingerprint": "FA-34 3C 2A 62 C2 21 20 B4"
+  },
+  "audit": []
+}

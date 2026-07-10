@@ -1,31 +1,89 @@
-# Fake X - Zaio Solo Project
+# Fantasia
 
-A vanilla HTML/CSS/JavaScript X-style timeline clone for the Zaio Project Simulation assignment.
+Fantasia is now a full-stack private messaging app for exactly two people. It has a Node backend, real sign-in, persistent server storage, media uploads, live chat updates, stories, privacy settings, backups, export, and browser-to-browser voice/video calling through WebRTC signaling.
 
-## Highlighted Features
+## Run
 
-- Core X clone: timeline feed, composer, post prepend, likes, reposts, replies, share, bookmarks, navigation views, profile editing, responsive layout, and localStorage persistence.
-- Cursor-assisted feature: media uploads with preview support for inline and modal posts, plus selected feed posts with image media and placeholder media cards.
-- Cursor-assisted feature: Following tab and follow/unfollow controls that persist and filter the timeline.
-- Manual custom feature: interactive polls. Create a poll from the composer, attach it to a post, vote in the feed, lock one vote per user, and persist poll votes.
+```powershell
+node server.js
+```
 
-## Run Locally
+Open:
 
-1. Open this folder in VS Code.
-2. Use Live Server or any static server.
-3. You can also double-click `index.html` for a quick local preview.
+```text
+http://localhost:5173
+```
 
-## Project Structure
+The first server start creates two accounts:
 
-- `index.html`: app markup, views, composer controls, right column, and modals.
-- `style.css`: X-style dark layout, responsive rules, media placeholders, poll styling, and right-column footer.
-- `script.js`: feed rendering, composer, Cursor-assisted media handling, manual poll feature, interactions, view switching, and persistence.
-- `additional.js`: profile editing, explore search/tabs, and notification stub.
-- `assests/`: profile images and feed media.
+```text
+me / change-me-now
+partner / change-partner-now
+```
 
-## Loom Demo Notes
+Sign in, open Privacy, and change both passwords before putting the app on the internet.
 
-- Show a normal post, an image post, and a placeholder media post.
-- Show the poll flow: create options, attach the poll, post it, then vote.
-- Mention the Cursor-assisted media preview work and Following filter.
-- Refresh the page to show localStorage persistence.
+## Send It To Your Partner
+
+Your partner cannot use `file:///C:/...` from far away. Fantasia must run on a machine reachable from the internet.
+
+Good options:
+
+- Deploy it to a Node host such as Render, Railway, Fly.io, a VPS, or your own server.
+- Set `PORT` if the host requires it.
+- Use HTTPS. Camera, microphone, and screen sharing require HTTPS on real domains.
+- Share the public URL with your partner.
+
+Recommended environment variables before first launch:
+
+```text
+FANTASIA_ME_USERNAME=yourname
+FANTASIA_ME_PASSWORD=use-a-long-private-password
+FANTASIA_ME_NAME=Your Name
+FANTASIA_PARTNER_USERNAME=partnername
+FANTASIA_PARTNER_PASSWORD=another-long-private-password
+FANTASIA_PARTNER_NAME=Partner Name
+PORT=5173
+```
+
+## What Works
+
+- Exactly two accounts.
+- Password sign-in and sign-out.
+- Live message sync over the internet using server-sent events.
+- Persistent messages in `data/fantasia-db.json`.
+- Media uploads stored in `uploads/`.
+- Text, links, Markdown-style bold/italic/code, replies, forwarding, edit, delete for me, delete for everyone.
+- Reactions, pinned messages, starred/saved messages, search, disappearing messages, view-once labels.
+- Poll creation and voting.
+- Voice notes recorded in the browser and sent as audio.
+- Stories/status with 24-hour expiry.
+- Shared media gallery.
+- Online/last-seen presence and typing indicators.
+- Privacy settings and password change.
+- Export and backup.
+- WebRTC voice/video calls, mute, camera toggle, screen share, and end call.
+- Deterministic assistant tools: summary, smart replies, task extraction, mood read.
+
+## Files
+
+- `server.js`: backend, auth, storage, media, live events, call signaling.
+- `index.html`: app screens and controls.
+- `script.js`: frontend API client, rendering, chat, calls, media, settings.
+- `style.css`: responsive UI.
+- `data/`: created at runtime for the database.
+- `uploads/`: created at runtime for files and voice notes.
+- `backups/`: created at runtime for manual backups.
+
+## Important Security Notes
+
+This is a real working full-stack app, but before treating it like Signal or WhatsApp in production, add a reverse proxy with HTTPS, stronger operational hardening, encrypted database/media at rest, and a reviewed end-to-end encryption protocol. The current version protects access with account passwords and private server storage, but the server can still read message contents.
+
+## Verify
+
+```powershell
+node --check server.js
+node --check script.js
+```
+
+Then open two browser windows, sign in as each account, and chat between them.

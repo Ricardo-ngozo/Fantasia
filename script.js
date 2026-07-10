@@ -1,309 +1,662 @@
-const tweets = [
-  {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null,avatar:"./assests/png",verified:true},
-  {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null,avatar:"./assests/png (1)",verified:true,placeholder:"Launch checklist"},
-  {id:3,name:"Kamo Digwamaje",handle:"@kamo_dig",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"./assests/developer.png",avatar:"./assests/png (2)",verified:true},
-  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null,avatar:"./assests/png (3)",verified:true,placeholder:"Responsive layout pass"},
-  {id:5,name:"Banele",handle:"@banele",time:"8h",text:"Late night deploys hit different when the tests finally pass. #DevLife",likes:87,retweets:12,replies:5,img:null,avatar:"./assests/png (4)"},
-  {id:6,name:"Enny",handle:"@enny_l",time:"9h",text:"Why does CSS flexbox feel like black magic until it suddenly works? Magic. ✨",likes:312,retweets:55,replies:19,img:"./assests/developer.png",avatar:"./assests/png (5)",verified:true},
-  {id:7,name:"Qhawekazi",handle:"@qhawekazi",time:"10h",text:"First time using localStorage for persistence and it actually survived a refresh. Small wins!",likes:156,retweets:29,replies:11,img:null,avatar:"./assests/png (6)",poll:{question:"Best feature in this clone?",options:["Polls","Images","Bookmarks"],votes:[12,8,5]}},
-  {id:8,name:"Sfiso",handle:"@sfiso",time:"11h",text:"Building this fake X clone for the assignment. Polls feature is my manual one. Goofy but it works 😂",likes:421,retweets:67,replies:33,img:null,avatar:"./assests/png (7)"},
-  {id:9,name:"Mahlatse",handle:"@mahlatse",time:"12h",text:"Dark mode on everything. My eyes thank me every night. Who still uses light theme in 2026?",likes:703,retweets:134,replies:47,img:null,avatar:"./assests/png (8)"},
-  {id:10,name:"Jael",handle:"@jael_codes",time:"13h",text:"Cursor AI suggestions are wild sometimes but I keep the best ones. Ship fast, fix later.",likes:89,retweets:15,replies:7,img:"./assests/developer.png",avatar:"./assests/png (9)"},
-  {id:11,name:"Dido",handle:"@dido",time:"14h",text:"Netlify deploy went smooth. Zero drama this time. Feeling blessed. #Netlify",likes:234,retweets:41,replies:18,img:null,avatar:"./assests/png (10)"},
-  {id:12,name:"Bea",handle:"@bea",time:"15h",text:"Just realized how many times I say 'just' in my code comments. Just fix it later. Just one more thing.",likes:178,retweets:22,replies:14,img:null,avatar:"./assests/png (11)"}
-];
-const trends = [
-  {cat:"Technology · Trending",name:"#JavaScript",count:"84.2K posts",tag:"tech"},
-  {cat:"Trending in South Africa",name:"#LoadShedding",count:"61.5K posts",tag:"news"},
-  {cat:"Sport · Trending",name:"Bafana Bafana",count:"33.8K posts",tag:"sport"},
-  {cat:"Technology · Trending",name:"#Netlify",count:"9.3K posts",tag:"tech"},
-  {cat:"Trending",name:"#CursorAI",count:"27.1K posts",tag:"tech"}
-];
-const peopleToFollow = [
-  {name:"Cursor",handle:"@cursor_ai",img:"./assests/png (2)",verified:true},
-  {name:"Kago",handle:"@kago",img:"./assests/png (4)",verified:false},
-  {name:"Netlify",handle:"@netlify",img:"./assests/png (6)",verified:true}
-];
-let likedSet = new Set(), retweetedSet = new Set(), followed = new Set(), bookmarked = new Set(), userPollVotes = {};
-let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"./assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",bio:"Fullstack web developer | Learning at Zaio",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const STORAGE_KEY = 'post_tweets_v2', LIKES_KEY='post_likes_v2', RTS_KEY='post_rts_v2', POLL_KEY='post_pollvotes_v2', FOL_KEY='post_followed_v2', BM_KEY='post_bookmarks_v2', USER_KEY='post_current_user_v2';
-
-function loadFromStorage() {
-  try {
-    const st = localStorage.getItem(STORAGE_KEY); if (st) { const p=JSON.parse(st); if (Array.isArray(p)&&p.length){ tweets.length=0; tweets.push(...p); } }
-    const sl=localStorage.getItem(LIKES_KEY); if(sl) likedSet=new Set(JSON.parse(sl));
-    const sr=localStorage.getItem(RTS_KEY); if(sr) retweetedSet=new Set(JSON.parse(sr));
-    const sf=localStorage.getItem(FOL_KEY); if(sf) followed=new Set(JSON.parse(sf));
-    const sb=localStorage.getItem(BM_KEY); if(sb) bookmarked=new Set(JSON.parse(sb));
-    const su=localStorage.getItem(USER_KEY); if(su) currentUser={...currentUser,...JSON.parse(su)};
-    const sp=localStorage.getItem(POLL_KEY); if(sp) userPollVotes=JSON.parse(sp)||{};
-  } catch(e){}
-}
-function saveToStorage() {
-  try {
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(tweets));
-    localStorage.setItem(LIKES_KEY,JSON.stringify([...likedSet]));
-    localStorage.setItem(RTS_KEY,JSON.stringify([...retweetedSet]));
-    localStorage.setItem(FOL_KEY,JSON.stringify([...followed]));
-    localStorage.setItem(BM_KEY,JSON.stringify([...bookmarked]));
-    localStorage.setItem(USER_KEY,JSON.stringify(currentUser));
-    localStorage.setItem(POLL_KEY,JSON.stringify(userPollVotes));
-  } catch(e){}
-}
-function updateProfileUI() {
-  const ids=['sidebarName','sidebarHandle','sidebarAvatar','profileName','profileHandle','profileBio','profileLocation','profileWebsite','profileJoinDate','profileAvatar'];
-  const vals=[currentUser.name,currentUser.handle,currentUser.avatar,currentUser.name,currentUser.handle,currentUser.bio,currentUser.location,currentUser.website,currentUser.joined,currentUser.avatar.replace('/48?','/120?')];
-  ids.forEach((id,i)=>{const el=document.getElementById(id); if(!el) return; if(id.includes('Avatar')) el.src=vals[i]; else if(id==='profileWebsite'){ el.textContent=vals[i]; el.href=vals[i].startsWith('http')?vals[i]:'https://'+vals[i]; } else el.textContent=vals[i];});
-}
-
-const ICONS = {
-  reply:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M21 12c0 4.4-4 8-9 8-1.4 0-2.7-.3-3.9-.8L3 20l1.1-4.3C3.4 14.4 3 13.2 3 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg>`,
-  retweet:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>`,
-  like:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7.5-4.9-10-9.5C.5 7.8 2.6 4 6.3 4c2 0 3.6 1.1 4.5 2.5C11.7 5.1 13.3 4 15.3 4 19 4 21.1 7.8 20.6 11.5 18.1 16.1 12 21 12 21z"/></svg>`,
-  likeFilled:`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.9-10-9.5C.5 7.8 2.6 4 6.3 4c2 0 3.6 1.1 4.5 2.5C11.7 5.1 13.3 4 15.3 4 19 4 21.1 7.8 20.6 11.5 18.1 16.1 12 21 12 21z"/></svg>`,
-  share:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 16V4M7 8l5-5 5 5M5 14v5a1 1 0 001 1h12a1 1 0 001-1v-5"/></svg>`,
-  bookmark:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`,
-  bookmarkFilled:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`,
-  views:`<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 19V5M10 19V9M16 19v-7M22 19V3"/></svg>`,
-  verified:`<span class="verified-badge" title="Verified"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>`
+const app = {
+  token: localStorage.getItem("fantasia_token"),
+  me: null,
+  partner: null,
+  messages: [],
+  stories: [],
+  settings: {},
+  presence: {},
+  attachments: [],
+  replyTo: null,
+  mediaFilter: "all",
+  eventSource: null,
+  typingTimer: null,
+  call: {
+    peer: null,
+    localStream: null,
+    screenStream: null,
+    callId: null,
+    incoming: null,
+    makingOffer: false
+  }
 };
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function linkify(t){return escapeHtml(t).replace(/#(\w+)/g,'<span class="tag">#$1</span>');}
-function fmt(n){return n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'K':n;}
 
-let pendingInlinePoll=null, pendingModalPoll=null;
+const emojiSet = ["💜", "❤️", "😂", "🥹", "😘", "🔥", "✨", "🙏", "👀", "🎧", "🍿", "🌙"];
 
-function showPollCreator(source) {
-  const isInline = source === 'inline';
-  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
-  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
-  if (attached) attached.classList.add('hidden');
-  if (creator) {
-    creator.classList.remove('hidden');
-    const inputs = creator.querySelectorAll('input');
-    inputs.forEach(i => i.value = '');
+async function api(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  if (!(options.body instanceof FormData)) headers["Content-Type"] = "application/json";
+  if (app.token) headers.Authorization = `Bearer ${app.token}`;
+  const response = await fetch(path, { ...options, headers });
+  if (response.status === 401) {
+    signOut(false);
+    throw new Error("Please sign in again.");
   }
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+  if (!response.ok) throw new Error(data?.error || "Request failed.");
+  return data;
 }
 
-function attachPoll(source, silent) {
-  const isInline = source === 'inline';
-  const qEl = document.getElementById(isInline ? 'inlinePollQ' : 'modalPollQ');
-  const creatorSel = isInline ? '#inlinePollCreator' : '#modalPollCreator';
-  const optsEls = document.querySelectorAll(creatorSel + ' .popt');
-  const question = (qEl ? qEl.value : '').trim();
-  const opts = Array.from(optsEls).map(el => el.value.trim()).filter(Boolean).slice(0,4);
-  if (!question || opts.length < 2) { if (!silent) alert('Need a question + at least 2 options'); return; }
-  const p = {question, options: opts, votes: opts.map(()=>0)};
-  if (isInline) pendingInlinePoll = p; else pendingModalPoll = p;
-  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
-  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
-  if (attached) {
-    attached.innerHTML = `📊 ${question} <span class="remove" data-src="${source}">✕</span>`;
-    attached.classList.remove('hidden');
+function escapeHtml(value = "") {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
+
+function renderMarkdown(text) {
+  let safe = escapeHtml(text);
+  safe = safe.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  safe = safe.replace(/\*(.*?)\*/g, "<em>$1</em>");
+  safe = safe.replace(/`(.*?)`/g, "<code>$1</code>");
+  safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noreferrer">$1</a>');
+  return safe.replace(/\n/g, "<br>");
+}
+
+function timeAgo(ts) {
+  const diff = Math.max(1, Math.floor((Date.now() - new Date(ts).getTime()) / 1000));
+  if (diff < 60) return `${diff}s`;
+  const min = Math.floor(diff / 60);
+  if (min < 60) return `${min}m`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h`;
+  return `${Math.floor(hr / 24)}d`;
+}
+
+function showToast(message) {
+  const toast = $("#toast");
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.add("hidden"), 2400);
+}
+
+function showApp() {
+  $("#authScreen").classList.add("hidden");
+  $("#appShell").classList.remove("hidden");
+}
+
+function showAuth() {
+  $("#authScreen").classList.remove("hidden");
+  $("#appShell").classList.add("hidden");
+}
+
+async function signOut(callServer = true) {
+  if (callServer && app.token) {
+    try { await api("/api/logout", { method: "POST", body: "{}" }); } catch {}
   }
-  if (creator) creator.classList.add('hidden');
-  if (!silent) showToast('Poll attached! Now post it.');
+  localStorage.removeItem("fantasia_token");
+  if (app.eventSource) app.eventSource.close();
+  stopCall();
+  app.token = null;
+  showAuth();
 }
 
-function removePoll(source) {
-  const isInline = source === 'inline';
-  if (isInline) pendingInlinePoll = null; else pendingModalPoll = null;
-  const attached = document.getElementById(isInline ? 'inlinePollAttached' : 'modalPollAttached');
-  const creator = document.getElementById(isInline ? 'inlinePollCreator' : 'modalPollCreator');
-  if (attached) attached.classList.add('hidden');
-  if (creator) creator.classList.add('hidden');
+async function loadSession() {
+  if (!app.token) return showAuth();
+  const data = await api("/api/session");
+  app.me = data.me;
+  app.partner = data.partner;
+  app.messages = data.messages;
+  app.stories = data.stories;
+  app.settings = data.settings;
+  app.presence = data.presence;
+  showApp();
+  renderAll();
+  connectEvents();
+  await api("/api/presence", { method: "POST", body: JSON.stringify({ status: "online" }) });
 }
 
-function clearPolls() {
-  pendingInlinePoll = null;
-  pendingModalPoll = null;
-  const els = ['inlinePollCreator','inlinePollAttached','modalPollCreator','modalPollAttached'];
-  els.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
+function connectEvents() {
+  if (app.eventSource) app.eventSource.close();
+  app.eventSource = new EventSource(`/api/events?token=${encodeURIComponent(app.token)}`);
+  app.eventSource.addEventListener("state", (event) => {
+    const data = JSON.parse(event.data);
+    app.messages = data.messages;
+    app.stories = data.stories;
+    app.settings = data.settings;
+    app.presence = data.presence;
+    renderAll(false);
+  });
+  app.eventSource.addEventListener("typing", (event) => {
+    const data = JSON.parse(event.data);
+    if (data.userId !== app.me.id) showTyping(`${app.partner.displayName} is typing...`);
+  });
+  app.eventSource.addEventListener("call", (event) => handleCallSignal(JSON.parse(event.data)));
+  app.eventSource.onerror = () => $("#presenceLine").textContent = "Reconnecting...";
+}
+
+function renderIdentity() {
+  $("#meAvatar").src = app.me.avatar;
+  $("#meName").textContent = app.me.displayName;
+  $("#partnerName").textContent = app.partner.displayName;
+  const p = app.presence[app.partner.id];
+  const online = p?.status === "online" && Date.now() - new Date(p.lastSeenAt).getTime() < 45000;
+  $("#presenceLine").textContent = online ? "online now - encrypted server sync" : `last seen ${p?.lastSeenAt ? timeAgo(p.lastSeenAt) : "recently"} ago`;
+  $("#sessionLabel").textContent = `@${app.me.username}`;
+}
+
+function visibleMessages() {
+  const query = ($("#searchInput").value || "").toLowerCase().trim();
+  const type = $("#searchType").value;
+  return app.messages.filter((message) => {
+    if (message.hiddenFor?.includes(app.me.id)) return false;
+    if (message.expiresAt && Date.now() > new Date(message.expiresAt).getTime()) return false;
+    const hasMedia = message.attachments?.length;
+    const hasLink = /https?:\/\//i.test(message.text);
+    const matchesType =
+      type === "all" ||
+      (type === "media" && hasMedia) ||
+      (type === "links" && hasLink) ||
+      (type === "pinned" && message.pinned) ||
+      (type === "starred" && message.starred);
+    const haystack = [message.text, message.poll?.question, ...(message.attachments || []).map((file) => file.name)].join(" ").toLowerCase();
+    return matchesType && (!query || haystack.includes(query));
   });
 }
 
-// FEATURE: custom poll creator, attach, and voting flow.
-const ipb = document.getElementById('inlinePollBtn');
-const mpb = document.getElementById('modalPollBtn');
-if (ipb) ipb.addEventListener('click', () => showPollCreator('inline'));
-if (mpb) mpb.addEventListener('click', () => showPollCreator('modal'));
-
-document.addEventListener('click', (e) => {
-  const t = e.target;
-  if (t.classList.contains('attach')) {
-    attachPoll(t.dataset.src);
-  } else if (t.classList.contains('cancel')) {
-    const c = document.getElementById(t.dataset.src==='inline' ? 'inlinePollCreator' : 'modalPollCreator');
-    if (c) c.classList.add('hidden');
-  } else if (t.classList.contains('remove') || t.closest('.remove')) {
-    const r = t.dataset.src || t.closest('.remove')?.dataset.src;
-    if (r) removePoll(r);
-  }
-});
-
-function tweetTemplate(t){
-  const liked=likedSet.has(t.id), rt=retweetedSet.has(t.id), bm=bookmarked.has(t.id);
-  const verified=t.verified ? ICONS.verified : '';
-  let phtml='';
-  if(t.poll && t.poll.options){
-    const vi = userPollVotes[t.id];
-    phtml = `<div class="poll"><div class="poll-q">${escapeHtml(t.poll.question)}</div>` +
-      t.poll.options.map((o,i)=>`<button class="poll-opt${vi===i?' voted':''}" data-pid="${t.id}" data-oi="${i}">${escapeHtml(o)}<span class="pv">${t.poll.votes[i]||0}</span></button>`).join('') + `</div>`;
-  }
-  return `<article class="tweet" data-id="${t.id}">
-    <img class="avatar" src="${t.avatar||'./assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png'}" alt="">
-    <div class="tweet-body">
-      <div class="tweet-meta"><strong>${escapeHtml(t.name)}</strong>${verified} <span class="handle">${t.handle}</span> <span class="dot">·</span> <span class="time">${t.time}</span><button class="tweet-more" aria-label="More">•••</button></div>
-      <div class="tweet-text">${linkify(t.text)}</div>
-      ${t.img?`<img class="tweet-img" src="${t.img}" alt="" loading="lazy">`:''}
-      ${!t.img&&t.placeholder?`<div class="tweet-placeholder"><span>${escapeHtml(t.placeholder)}</span></div>`:''}
-      ${phtml}
-      <div class="tweet-actions">
-        <button class="reply-btn">${ICONS.reply}<span>${fmt(t.replies||0)}</span></button>
-        <button class="retweet-btn ${rt?'retweeted':''}">${ICONS.retweet}<span>${fmt((t.retweets||0)+(rt?1:0))}</span></button>
-        <button class="like-btn ${liked?'liked':''}">${liked?ICONS.likeFilled:ICONS.like}<span>${fmt((t.likes||0)+(liked?1:0))}</span></button>
-        <button class="views-btn">${ICONS.views}<span>${fmt(((t.likes||0) * 120) + 1800)}</span></button>
-        <button class="share-btn">${ICONS.share}</button>
-        <button class="bookmark-btn">${bm?ICONS.bookmarkFilled:ICONS.bookmark}</button>
-      </div>
-    </div>
-  </article>`;
+function renderMessages(keepScroll = false) {
+  const list = $("#messageList");
+  const atBottom = list.scrollTop + list.clientHeight >= list.scrollHeight - 80;
+  list.innerHTML = visibleMessages().map((message) => {
+    const sender = message.senderId === app.me.id ? app.me : app.partner;
+    const mine = sender.id === app.me.id;
+    const reply = message.replyTo ? app.messages.find((item) => item.id === message.replyTo) : null;
+    const reactions = Object.entries(message.reactions || {}).filter(([, users]) => users.length);
+    return `
+      <article class="message ${mine ? "mine" : "theirs"}" data-id="${message.id}">
+        <img class="message-avatar" src="${sender.avatar}" alt="">
+        <div class="bubble">
+          <div class="message-meta">
+            <strong>${escapeHtml(sender.displayName)}</strong>
+            <span>${timeAgo(message.createdAt)} - ${message.status}</span>
+          </div>
+          ${reply ? `<button class="quoted" data-jump="${reply.id}">${escapeHtml(reply.text.slice(0, 90))}</button>` : ""}
+          <div class="message-text">${renderMarkdown(message.text)}</div>
+          ${renderAttachments(message)}
+          ${renderPoll(message)}
+          <div class="message-badges">
+            ${message.pinned ? "<span>Pinned</span>" : ""}
+            ${message.starred ? "<span>Starred</span>" : ""}
+            ${message.viewOnce ? "<span>View once</span>" : ""}
+            ${message.expiresAt ? `<span>Expires ${timeAgo(message.expiresAt)}</span>` : ""}
+            ${message.editedAt ? "<span>Edited</span>" : ""}
+          </div>
+          <div class="reaction-row">${reactions.map(([emoji, ids]) => `<button data-react="${escapeHtml(emoji)}">${escapeHtml(emoji)} ${ids.length}</button>`).join("")}</div>
+          <div class="message-actions">
+            <button data-act="reply">Reply</button>
+            <button data-act="react">React</button>
+            ${mine ? '<button data-act="edit">Edit</button>' : ""}
+            <button data-act="pin">${message.pinned ? "Unpin" : "Pin"}</button>
+            <button data-act="star">${message.starred ? "Unstar" : "Star"}</button>
+            <button data-act="forward">Forward</button>
+            <button data-act="deleteMe">Delete me</button>
+            ${mine ? '<button data-act="deleteAll">Delete all</button>' : ""}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+  renderPinned();
+  if (!keepScroll || atBottom) list.scrollTop = list.scrollHeight;
 }
 
-let homeTab = 'foryou';
-function renderFeed(){
-  const feed = document.getElementById('feed');
-  let list = tweets;
-  if(homeTab==='following') list = tweets.filter(t => followed.has(t.handle) || t.handle===currentUser.handle);
-  feed.innerHTML = list.map(tweetTemplate).join('');
-}
-function renderBookmarks(){
-  const c = document.getElementById('bookmarksFeed'); if(!c) return;
-  const f = tweets.filter(t=>bookmarked.has(t.id));
-  c.innerHTML = f.length ? f.map(tweetTemplate).join('') : '<div class="empty-note">No bookmarks yet. Tap bookmark on posts.</div>';
-}
-
-document.addEventListener('click', e => {
-  const art = e.target.closest('.tweet'); if(!art) return;
-  const raw = art.dataset.id; const tw = tweets.find(x => String(x.id) === String(raw)); if(!tw) return;
-  const id = tw.id;
-  if(e.target.closest('.like-btn')){
-    likedSet.has(id)?likedSet.delete(id):likedSet.add(id);
-    art.outerHTML = tweetTemplate(tw); saveToStorage();
-  } else if(e.target.closest('.retweet-btn')){
-    if(retweetedSet.has(id)) retweetedSet.delete(id); else { retweetedSet.add(id); showToast('Reposted to followers ✦'); }
-    art.outerHTML = tweetTemplate(tw); saveToStorage();
-  } else if(e.target.closest('.reply-btn')){
-    tw.replies = (tw.replies||0)+1; art.outerHTML=tweetTemplate(tw); saveToStorage();
-    openComposeModal(); setTimeout(()=>{ const f=document.getElementById('modalText')||document.getElementById('inlineText'); if(f){f.value='@'+tw.handle+' '; f.focus(); f.selectionStart=f.selectionEnd=f.value.length;} },40);
-  } else if(e.target.closest('.share-btn')){ showToast('Link copied ✦'); }
-  else if(e.target.closest('.bookmark-btn')){
-    if(bookmarked.has(id)) bookmarked.delete(id); else {bookmarked.add(id); showToast('Added to Bookmarks');}
-    art.outerHTML = tweetTemplate(tw); saveToStorage();
-  } else if(e.target.closest('.poll-opt')){
-    const po = e.target.closest('.poll-opt'); const pid=po.dataset.pid, oi=+po.dataset.oi;
-    const pt = tweets.find(x=>String(x.id)===String(pid)); if(!pt||!pt.poll||userPollVotes[pid]!=null) return;
-    pt.poll.votes[oi]=(pt.poll.votes[oi]||0)+1; userPollVotes[pid]=oi;
-    art.outerHTML = tweetTemplate(pt); saveToStorage();
-  }
-});
-
-let toastT; function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.remove('hidden'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.add('hidden'),2300); }
-
-function setView(n){
-  document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
-  let tgt = document.getElementById('view-'+n);
-  if(!tgt){
-    tgt = document.getElementById('view-home');
-    const main = document.getElementById('mainContent');
-    if(main && n!=='home'){ main.dataset.stub = n; }
-  }
-  tgt.classList.remove('hidden');
-  document.querySelectorAll('.nav-item[data-view],.mobile-nav a[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===n));
-  if(n==='bookmarks') renderBookmarks();
-}
-document.querySelectorAll('.nav-item[data-view], .mobile-nav a[data-view]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault(); if(l.dataset.view) setView(l.dataset.view);}));
-setView('home');
-
-const inlineText=document.getElementById('inlineText'), inlinePostBtn=document.getElementById('inlinePostBtn'), inlineChar=document.getElementById('inlineCharCount');
-if(inlineText&&inlinePostBtn){
-  inlineText.addEventListener('input',()=>{ const r=280-inlineText.value.length; if(inlineChar){inlineChar.textContent=r; inlineChar.style.color=r<20?'var(--danger)':'var(--text-faint)';} inlinePostBtn.disabled=!inlineText.value.trim(); if(!inlineText.value.trim()) clearPolls(); });
-  inlinePostBtn.addEventListener('click',()=>postNewTweet(inlineText.value,'inline'));
-}
-// CURSOR FEATURE: image upload previews and stored media posts.
-let inlineImg=null, modalImg=null;
-function setupImg(btnId,inId,preId,cb){
-  const b=document.getElementById(btnId), inp=document.getElementById(inId), pre=document.getElementById(preId); if(!b||!inp||!pre)return;
-  b.addEventListener('click',()=>inp.click());
-  inp.addEventListener('change',()=>{ const f=inp.files&&inp.files[0]; if(!f||!f.type.startsWith('image/')){inp.value='';return;} const r=new FileReader(); r.onload=e=>{cb(e.target.result,pre);}; r.readAsDataURL(f); inp.value=''; });
-}
-function setPre(el,du,clr){ el.innerHTML=`<img class="image-preview" src="${du}" alt=""><button class="remove-image-btn">✕</button>`; el.querySelector('.remove-image-btn').addEventListener('click',()=>{el.innerHTML='';clr();}); }
-setupImg('inlineImageBtn','inlineFileInput','inlineImagePreview',(d,p)=>{inlineImg=d; setPre(p,d,()=>{inlineImg=null;});});
-setupImg('modalImageBtn','modalFileInput','modalImagePreview',(d,p)=>{modalImg=d; setPre(p,d,()=>{modalImg=null;});});
-function getImg(s){return s==='inline'?inlineImg:modalImg;}
-function clrImg(s){ if(s==='inline'){inlineImg=null; const p=document.getElementById('inlineImagePreview'); if(p)p.innerHTML='';} else {modalImg=null; const p=document.getElementById('modalImagePreview'); if(p)p.innerHTML='';} }
-
-function postNewTweet(txt,src='inline'){
-  txt=(txt||'').trim(); if(!txt) return;
-  if (src==='inline' && !pendingInlinePoll) {
-    const c = document.getElementById('inlinePollCreator');
-    if (c && !c.classList.contains('hidden')) { try { attachPoll('inline', true); } catch(e){} }
-  } else if (src==='modal' && !pendingModalPoll) {
-    const c = document.getElementById('modalPollCreator');
-    if (c && !c.classList.contains('hidden')) { try { attachPoll('modal', true); } catch(e){} }
-  }
-  const img = getImg(src); const poll = src==='inline'?pendingInlinePoll:pendingModalPoll;
-  tweets.unshift({id:'u'+Date.now(), name:currentUser.name, handle:currentUser.handle, time:'now', text:txt, likes:0,retweets:0,replies:0, img:img||null, avatar:currentUser.avatar, poll:poll||null, verified:true });
-  renderFeed();
-  if(src==='inline'){
-    if(inlineText) inlineText.value=''; if(inlinePostBtn) inlinePostBtn.disabled=true; clrImg('inline'); clearPolls();
-  } else {
-    const mt=document.getElementById('modalText'); if(mt)mt.value=''; const mp=document.getElementById('modalPostBtn'); if(mp)mp.disabled=true; const cc=document.getElementById('charCount'); if(cc)cc.textContent='280'; clrImg('modal'); clearPolls(); closeComposeModal();
-  }
-  saveToStorage(); showToast('Posted ✦'); window.scrollTo({top:0,behavior:'smooth'});
+function renderAttachments(message) {
+  if (!message.attachments?.length || app.settings.hideMedia) return "";
+  return `<div class="attachment-list">${message.attachments.map((file) => {
+    if (file.type.startsWith("image/")) {
+      return `<figure class="image-attachment"><img src="${file.url}" alt="${escapeHtml(file.name)}"><figcaption>${escapeHtml(file.name)}</figcaption></figure>`;
+    }
+    if (file.type.startsWith("audio/")) {
+      return `<div class="file-attachment"><strong>${escapeHtml(file.name)}</strong><audio controls src="${file.url}"></audio></div>`;
+    }
+    return `<a class="file-attachment" href="${file.url}" download><strong>${escapeHtml(file.name)}</strong><span>${escapeHtml(file.type)}</span></a>`;
+  }).join("")}</div>`;
 }
 
-const overlay=document.getElementById('modalOverlay'), modalText=document.getElementById('modalText'), modalPost=document.getElementById('modalPostBtn'), ccEl=document.getElementById('charCount'), closeM=document.getElementById('closeModal'), openC=document.getElementById('openCompose');
-function openComposeModal(){ if(overlay){overlay.classList.remove('hidden'); if(modalText)modalText.focus(); document.body.style.overflow='hidden';} }
-function closeComposeModal(){ if(overlay){overlay.classList.add('hidden'); document.body.style.overflow=''; clearPolls();} }
-if(openC) openC.addEventListener('click',openComposeModal);
-if(closeM) closeM.addEventListener('click',closeComposeModal);
-if(overlay) overlay.addEventListener('click',e=>{if(e.target===overlay)closeComposeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay&&!overlay.classList.contains('hidden'))closeComposeModal();});
-if(modalText&&modalPost&&ccEl){
-  modalText.addEventListener('input',()=>{ const r=280-modalText.value.length; ccEl.textContent=r; ccEl.style.color=r<20?'var(--danger)':'var(--text-faint)'; modalPost.disabled=!modalText.value.trim(); if(!modalText.value.trim()) clearPolls(); });
-  modalPost.addEventListener('click',()=>postNewTweet(modalText.value,'modal'));
+function renderPoll(message) {
+  if (!message.poll) return "";
+  const total = Object.values(message.poll.votes).flat().length || 1;
+  return `<div class="poll-card"><strong>${escapeHtml(message.poll.question)}</strong>${message.poll.options.map((option) => {
+    const voters = message.poll.votes[option] || [];
+    const pct = Math.round((voters.length / total) * 100);
+    const voted = voters.includes(app.me.id);
+    return `<button data-poll="${escapeHtml(option)}" class="${voted ? "voted" : ""}"><span>${escapeHtml(option)}</span><i style="width:${pct}%"></i><b>${pct}%</b></button>`;
+  }).join("")}</div>`;
 }
 
-function renderRightSidebar(){
-  const te=document.getElementById('trends'), fe=document.getElementById('followList');
-  if(te) te.innerHTML=trends.slice(0,5).map(t=>`<div class="trend-item" data-tag="${t.tag}"><span class="trend-cat">${t.cat}</span><span class="trend-name">${t.name}</span><span class="trend-count">${t.count}</span></div>`).join('');
-  if(fe) fe.innerHTML=peopleToFollow.map((p,i)=>`<div class="follow-item" data-idx="${i}"><img class="avatar" src="${p.img}" alt=""><div class="follow-meta"><strong>${p.name}${p.verified?ICONS.verified:''}</strong><span>${p.handle}</span></div><button class="follow-btn ${followed.has(p.handle)?'following':''}">${followed.has(p.handle)?'Following':'Follow'}</button></div>`).join('');
+function renderPinned() {
+  const pinned = app.messages.filter((message) => message.pinned && !message.hiddenFor?.includes(app.me.id));
+  $("#pinnedStrip").innerHTML = pinned.length ? pinned.map((message) => `
+    <button data-jump="${message.id}"><strong>Pinned</strong><span>${escapeHtml(message.text.slice(0, 100))}</span></button>
+  `).join("") : "";
 }
-const flEl=document.getElementById('followList');
-if(flEl) flEl.addEventListener('click',e=>{
-  const btn=e.target.closest('.follow-btn'); if(!btn)return;
-  const it=btn.closest('.follow-item'); const h=it?peopleToFollow[+it.dataset.idx].handle:null; if(!h)return;
-  followed.has(h)?followed.delete(h):followed.add(h);
-  btn.classList.toggle('following',followed.has(h)); btn.textContent=followed.has(h)?'Following':'Follow';
-  saveToStorage(); if(homeTab==='following') renderFeed();
-});
 
-document.querySelectorAll('.home-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.home-tab').forEach(t=>{t.classList.remove('active'); t.style.color='var(--text-dim)'; t.style.borderBottom='';});
-    tab.classList.add('active'); tab.style.color='var(--text)'; tab.style.borderBottom='2px solid var(--accent)';
-    homeTab=tab.dataset.tab; renderFeed();
+function renderStories() {
+  $("#storyList").innerHTML = app.stories.length ? app.stories.map((story) => {
+    const user = story.userId === app.me.id ? app.me : app.partner;
+    return `<article class="story-card"><img src="${user.avatar}" alt=""><div><strong>${escapeHtml(user.displayName)}</strong><p>${escapeHtml(story.text)}</p><span>${timeAgo(story.createdAt)} ago - ${story.views.length} view</span></div></article>`;
+  }).join("") : `<div class="empty-state">No stories yet.</div>`;
+  $("#streakCount").textContent = String(calculateStreak());
+}
+
+function calculateStreak() {
+  const days = new Set(app.messages.map((message) => new Date(message.createdAt).toDateString()));
+  return days.size;
+}
+
+function renderMedia() {
+  const media = app.messages.flatMap((message) => (message.attachments || []).map((file) => ({ ...file, message })));
+  const filtered = media.filter((file) => app.mediaFilter === "all" || file.type.startsWith(`${app.mediaFilter}/`) || (app.mediaFilter === "file" && !file.type.startsWith("image/") && !file.type.startsWith("audio/")));
+  $("#mediaGrid").innerHTML = filtered.length ? filtered.map((file) => {
+    if (file.type.startsWith("image/")) return `<figure><img src="${file.url}" alt=""><figcaption>${escapeHtml(file.name)}</figcaption></figure>`;
+    return `<a class="media-file" href="${file.url}" download><strong>${escapeHtml(file.name)}</strong><span>${escapeHtml(file.type)}</span></a>`;
+  }).join("") : `<div class="empty-state">Shared media will appear here.</div>`;
+}
+
+function renderSaved() {
+  const saved = app.messages.filter((message) => message.starred);
+  $("#savedList").innerHTML = saved.length ? saved.map((message) => `<button data-jump="${message.id}">${escapeHtml(message.text.slice(0, 120))}</button>`).join("") : "No saved messages yet.";
+}
+
+function renderSettings() {
+  $("#appLockSetting").checked = !!app.settings.appLock;
+  $("#screenshotAlerts").checked = !!app.settings.screenshotAlerts;
+  $("#hideMedia").checked = !!app.settings.hideMedia;
+  $("#incognitoTyping").checked = !!app.settings.incognitoTyping;
+  $("#keyFingerprint").textContent = app.settings.keyFingerprint;
+}
+
+function renderAll(keepScroll = true) {
+  renderIdentity();
+  renderMessages(keepScroll);
+  renderStories();
+  renderMedia();
+  renderSaved();
+  renderSettings();
+}
+
+async function fileToPayload(file) {
+  const data = await new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
   });
+  return { name: file.name, type: file.type || "application/octet-stream", data };
+}
+
+function renderAttachmentPreview() {
+  $("#attachmentPreview").innerHTML = app.attachments.map((file, index) => `
+    <div class="preview-pill"><span>${escapeHtml(file.name)}</span><button type="button" data-remove-attachment="${index}">x</button></div>
+  `).join("");
+}
+
+async function sendMessage(extra = {}) {
+  const text = extra.text ?? $("#messageInput").value.trim();
+  if (!text && !app.attachments.length && !extra.poll) return;
+  await api("/api/messages", {
+    method: "POST",
+    body: JSON.stringify({
+      text,
+      replyTo: app.replyTo,
+      viewOnce: $("#viewOnceMode").checked,
+      timer: Number($("#timerMode").value),
+      attachments: app.attachments,
+      poll: extra.poll || null
+    })
+  });
+  app.attachments = [];
+  app.replyTo = null;
+  $("#messageInput").value = "";
+  $("#replyPreview").classList.add("hidden");
+  renderAttachmentPreview();
+}
+
+async function handleMessageAction(messageId, action) {
+  const message = app.messages.find((item) => item.id === messageId);
+  if (!message) return;
+  if (action === "reply") {
+    app.replyTo = message.id;
+    $("#replyPreview").innerHTML = `<span>Replying to: ${escapeHtml(message.text.slice(0, 80))}</span><button type="button" id="clearReply">x</button>`;
+    $("#replyPreview").classList.remove("hidden");
+    $("#messageInput").focus();
+    return;
+  }
+  if (action === "react") {
+    const emoji = prompt("Reaction", "💜");
+    if (emoji) await api(`/api/messages/${messageId}/reactions`, { method: "POST", body: JSON.stringify({ emoji }) });
+    return;
+  }
+  if (action === "edit") {
+    const text = prompt("Edit message", message.text);
+    if (text !== null) await api(`/api/messages/${messageId}`, { method: "PATCH", body: JSON.stringify({ text }) });
+    return;
+  }
+  if (action === "pin" || action === "star") {
+    await api(`/api/messages/${messageId}`, { method: "PATCH", body: JSON.stringify({ [action === "pin" ? "pinned" : "starred"]: !message[action === "pin" ? "pinned" : "starred"] }) });
+    return;
+  }
+  if (action === "forward") {
+    await api("/api/messages", { method: "POST", body: JSON.stringify({ text: `Forwarded: ${message.text}`, attachments: message.attachments }) });
+    return;
+  }
+  if (action === "deleteMe") await api(`/api/messages/${messageId}?mode=me`, { method: "DELETE" });
+  if (action === "deleteAll") await api(`/api/messages/${messageId}?mode=everyone`, { method: "DELETE" });
+}
+
+function showTyping(text) {
+  $("#typingLine").textContent = text;
+  clearTimeout(showTyping.timer);
+  showTyping.timer = setTimeout(() => $("#typingLine").textContent = "", 1600);
+}
+
+async function updateSetting(key, value) {
+  app.settings[key] = value;
+  renderSettings();
+  await api("/api/settings", { method: "PATCH", body: JSON.stringify({ [key]: value }) });
+}
+
+function renderPanel(view) {
+  $$(".rail-btn").forEach((button) => button.classList.toggle("active", button.dataset.panel === view));
+  $$(".panel-view").forEach((panel) => panel.classList.toggle("active", panel.dataset.view === view));
+}
+
+async function createPeer(video) {
+  stopCall(false);
+  const peer = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+  app.call.peer = peer;
+  app.call.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video });
+  $("#localVideo").srcObject = app.call.localStream;
+  $("#remoteVideo").srcObject = new MediaStream();
+  app.call.localStream.getTracks().forEach((track) => peer.addTrack(track, app.call.localStream));
+  peer.ontrack = (event) => event.streams[0].getTracks().forEach((track) => $("#remoteVideo").srcObject.addTrack(track));
+  peer.onicecandidate = (event) => {
+    if (event.candidate) sendCallSignal("candidate", event.candidate);
+  };
+  peer.onconnectionstatechange = () => $("#callStatus").textContent = `Call ${peer.connectionState}`;
+  return peer;
+}
+
+async function startCall(video) {
+  renderPanel("calls");
+  app.call.callId = crypto.randomUUID();
+  $("#callStatus").textContent = "Calling...";
+  const peer = await createPeer(video);
+  app.call.makingOffer = true;
+  const offer = await peer.createOffer();
+  await peer.setLocalDescription(offer);
+  app.call.makingOffer = false;
+  await sendCallSignal("offer", { sdp: peer.localDescription, video, callId: app.call.callId });
+}
+
+async function sendCallSignal(type, payload) {
+  await api("/api/calls/signal", { method: "POST", body: JSON.stringify({ type, payload, callId: app.call.callId }) });
+}
+
+async function handleCallSignal(signal) {
+  if (signal.from === app.me.id) return;
+  if (signal.type === "offer") {
+    app.call.incoming = signal;
+    app.call.callId = signal.callId;
+    $("#incomingCallText").textContent = `${app.partner.displayName} is calling.`;
+    $("#incomingCallDialog").showModal();
+    return;
+  }
+  const peer = app.call.peer;
+  if (!peer) return;
+  if (signal.type === "answer") await peer.setRemoteDescription(signal.payload.sdp);
+  if (signal.type === "candidate") await peer.addIceCandidate(signal.payload);
+  if (signal.type === "hangup") stopCall();
+}
+
+async function acceptCall() {
+  const signal = app.call.incoming;
+  if (!signal) return;
+  renderPanel("calls");
+  const peer = await createPeer(!!signal.payload.video);
+  await peer.setRemoteDescription(signal.payload.sdp);
+  const answer = await peer.createAnswer();
+  await peer.setLocalDescription(answer);
+  await sendCallSignal("answer", { sdp: peer.localDescription });
+  $("#callStatus").textContent = "Call active";
+}
+
+function stopCall(notify = true) {
+  if (notify && app.call.callId) sendCallSignal("hangup", {}).catch(() => {});
+  app.call.peer?.close();
+  app.call.localStream?.getTracks().forEach((track) => track.stop());
+  app.call.screenStream?.getTracks().forEach((track) => track.stop());
+  app.call = { peer: null, localStream: null, screenStream: null, callId: null, incoming: null, makingOffer: false };
+  $("#localVideo").srcObject = null;
+  $("#remoteVideo").srcObject = null;
+  $("#callStatus").textContent = "Ready for encrypted browser-to-browser calling.";
+}
+
+async function shareScreen() {
+  if (!app.call.peer) return showToast("Start a call first.");
+  app.call.screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+  const screenTrack = app.call.screenStream.getVideoTracks()[0];
+  const sender = app.call.peer.getSenders().find((item) => item.track?.kind === "video");
+  if (sender) sender.replaceTrack(screenTrack);
+  screenTrack.onended = () => {
+    const cameraTrack = app.call.localStream?.getVideoTracks()[0];
+    if (sender && cameraTrack) sender.replaceTrack(cameraTrack);
+  };
+}
+
+function summarize() {
+  const recent = app.messages.slice(-12).map((message) => `${message.senderId === app.me.id ? app.me.displayName : app.partner.displayName}: ${message.text}`);
+  $("#aiOutput").innerHTML = `<strong>Summary</strong><p>${escapeHtml(recent.join(" ")).slice(0, 600) || "No messages yet."}</p>`;
+}
+
+function smartReplies() {
+  const replies = ["I love you.", "Tell me more.", "Can we call?", "I saved this.", "I miss you."];
+  $("#aiOutput").innerHTML = replies.map((reply) => `<button data-insert="${escapeHtml(reply)}">${escapeHtml(reply)}</button>`).join("");
+}
+
+function tasks() {
+  const found = app.messages.filter((message) => /remember|buy|book|call|plan|tomorrow|today|task|todo/i.test(message.text));
+  $("#aiOutput").innerHTML = found.length ? found.map((message) => `<p>${escapeHtml(message.text)}</p>`).join("") : "No tasks detected.";
+}
+
+function mood() {
+  const text = app.messages.slice(-20).map((message) => message.text).join(" ").toLowerCase();
+  const warm = (text.match(/love|miss|happy|sweet|kiss|proud/g) || []).length;
+  const tense = (text.match(/sad|angry|sorry|tired|stress|miss/g) || []).length;
+  $("#aiOutput").textContent = warm >= tense ? "Mood: warm and connected." : "Mood: needs care and reassurance.";
+}
+
+document.addEventListener("click", async (event) => {
+  const panel = event.target.closest("[data-panel]");
+  if (panel) renderPanel(panel.dataset.panel);
+
+  const action = event.target.closest("[data-act]");
+  if (action) await handleMessageAction(action.closest(".message").dataset.id, action.dataset.act);
+
+  const jump = event.target.closest("[data-jump]");
+  if (jump) document.querySelector(`[data-id="${jump.dataset.jump}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  const poll = event.target.closest("[data-poll]");
+  if (poll) await api(`/api/messages/${poll.closest(".message").dataset.id}/poll`, { method: "POST", body: JSON.stringify({ option: poll.dataset.poll }) });
+
+  const remove = event.target.closest("[data-remove-attachment]");
+  if (remove) {
+    app.attachments.splice(Number(remove.dataset.removeAttachment), 1);
+    renderAttachmentPreview();
+  }
+
+  const filter = event.target.closest("[data-media-filter]");
+  if (filter) {
+    app.mediaFilter = filter.dataset.mediaFilter;
+    $$("[data-media-filter]").forEach((button) => button.classList.toggle("active", button === filter));
+    renderMedia();
+  }
+
+  const insert = event.target.closest("[data-insert]");
+  if (insert) {
+    $("#messageInput").value = insert.dataset.insert;
+    $("#messageInput").focus();
+  }
+
+  if (event.target.id === "clearReply") {
+    app.replyTo = null;
+    $("#replyPreview").classList.add("hidden");
+  }
 });
 
-function initApp(){
-  loadFromStorage(); updateProfileUI(); renderFeed(); renderRightSidebar();
-  if(followed.size===0){ followed.add('@kago'); followed.add('@genius_mat'); renderRightSidebar(); }
-  const hv=document.getElementById('view-home'); if(hv) hv.classList.remove('hidden');
-  setView('home');
-}
-initApp();
+$("#loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    const data = await api("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ username: $("#loginUsername").value.trim(), password: $("#loginPassword").value })
+    });
+    app.token = data.token;
+    localStorage.setItem("fantasia_token", app.token);
+    await loadSession();
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+
+$("#composer").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await sendMessage();
+});
+
+$("#messageInput").addEventListener("input", () => {
+  clearTimeout(app.typingTimer);
+  if (!app.settings.incognitoTyping) api("/api/typing", { method: "POST", body: "{}" }).catch(() => {});
+  app.typingTimer = setTimeout(() => {}, 1000);
+});
+
+$("#attachBtn").addEventListener("click", () => $("#fileInput").click());
+$("#fileInput").addEventListener("change", async (event) => {
+  const payloads = await Promise.all([...event.target.files].map(fileToPayload));
+  app.attachments.push(...payloads);
+  renderAttachmentPreview();
+  event.target.value = "";
+});
+
+$("#emojiBtn").addEventListener("click", () => $("#emojiPicker").classList.toggle("hidden"));
+$("#emojiPicker").innerHTML = emojiSet.map((emoji) => `<button type="button" data-insert="${emoji}">${emoji}</button>`).join("");
+
+$("#pollBtn").addEventListener("click", async () => {
+  const question = prompt("Poll question");
+  if (!question) return;
+  const options = (prompt("Options separated by commas", "Dinner, Movie, Call") || "").split(",").map((item) => item.trim()).filter(Boolean).slice(0, 6);
+  if (options.length < 2) return showToast("Add at least two options.");
+  await sendMessage({ text: question, poll: { question, options } });
+});
+
+$("#scheduleBtn").addEventListener("click", async () => {
+  const text = $("#messageInput").value.trim();
+  if (!text) return showToast("Type a message first.");
+  const minutes = Number(prompt("Send in how many minutes?", "1"));
+  if (!minutes) return;
+  await api("/api/messages", { method: "POST", body: JSON.stringify({ text, scheduledFor: new Date(Date.now() + minutes * 60000).toISOString() }) });
+  $("#messageInput").value = "";
+});
+
+let recorder = null;
+let voiceChunks = [];
+$("#voiceNoteBtn").addEventListener("click", async () => {
+  if (recorder?.state === "recording") {
+    recorder.stop();
+    $("#voiceNoteBtn").classList.remove("active");
+    return;
+  }
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  voiceChunks = [];
+  recorder = new MediaRecorder(stream);
+  recorder.ondataavailable = (event) => voiceChunks.push(event.data);
+  recorder.onstop = async () => {
+    stream.getTracks().forEach((track) => track.stop());
+    const blob = new Blob(voiceChunks, { type: "audio/webm" });
+    const file = new File([blob], `voice-${Date.now()}.webm`, { type: "audio/webm" });
+    app.attachments.push(await fileToPayload(file));
+    await sendMessage({ text: "Voice note" });
+  };
+  recorder.start();
+  $("#voiceNoteBtn").classList.add("active");
+  showToast("Recording. Tap Voice again to send.");
+});
+
+$("#storyForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const text = $("#storyInput").value.trim();
+  if (!text) return;
+  await api("/api/stories", { method: "POST", body: JSON.stringify({ text }) });
+  $("#storyInput").value = "";
+});
+
+$("#searchToggle").addEventListener("click", () => $("#searchStrip").classList.toggle("hidden"));
+$("#searchInput").addEventListener("input", () => renderMessages(true));
+$("#searchType").addEventListener("change", () => renderMessages(true));
+$("#logoutBtn").addEventListener("click", () => signOut());
+$("#exportBtn").addEventListener("click", () => window.open(`/api/export?token=${encodeURIComponent(app.token)}`));
+$("#backupBtn").addEventListener("click", async () => showToast((await api("/api/backup", { method: "POST", body: "{}" })).message));
+$("#clearLocalBtn").addEventListener("click", () => { localStorage.clear(); showToast("Local cache cleared."); });
+$("#savedBtn").addEventListener("click", () => $("#savedPanel").scrollIntoView({ behavior: "smooth" }));
+
+$("#voiceCallBtn").addEventListener("click", () => startCall(false).catch((error) => showToast(error.message)));
+$("#videoCallBtn").addEventListener("click", () => startCall(true).catch((error) => showToast(error.message)));
+$("#acceptCallBtn").addEventListener("click", (event) => { event.preventDefault(); $("#incomingCallDialog").close(); acceptCall().catch((error) => showToast(error.message)); });
+$("#declineCallBtn").addEventListener("click", () => { sendCallSignal("hangup", {}).catch(() => {}); app.call.incoming = null; });
+$("#endCallBtn").addEventListener("click", () => stopCall());
+$("#screenBtn").addEventListener("click", () => shareScreen().catch((error) => showToast(error.message)));
+$("#muteBtn").addEventListener("click", () => {
+  app.call.localStream?.getAudioTracks().forEach((track) => track.enabled = !track.enabled);
+  $("#muteBtn").classList.toggle("active");
+});
+$("#cameraBtn").addEventListener("click", () => {
+  app.call.localStream?.getVideoTracks().forEach((track) => track.enabled = !track.enabled);
+  $("#cameraBtn").classList.toggle("active");
+});
+
+["appLockSetting", "screenshotAlerts", "hideMedia", "incognitoTyping"].forEach((id) => {
+  $(`#${id}`).addEventListener("change", (event) => updateSetting(id, event.target.checked).catch((error) => showToast(error.message)));
+});
+
+$("#passwordForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await api("/api/password", { method: "POST", body: JSON.stringify({ oldPassword: $("#oldPassword").value, newPassword: $("#newPassword").value }) });
+    $("#oldPassword").value = "";
+    $("#newPassword").value = "";
+    showToast("Password changed.");
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+
+$("#summarizeBtn").addEventListener("click", summarize);
+$("#replyIdeasBtn").addEventListener("click", smartReplies);
+$("#tasksBtn").addEventListener("click", tasks);
+$("#moodBtn").addEventListener("click", mood);
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && app.token && app.settings.screenshotAlerts) {
+    api("/api/security-alert", { method: "POST", body: JSON.stringify({ text: "The app was backgrounded on one device. A screenshot or screen recording may have happened." }) }).catch(() => {});
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  if (app.token) {
+    fetch("/api/presence/offline", {
+      method: "POST",
+      keepalive: true,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${app.token}` },
+      body: "{}"
+    }).catch(() => {});
+  }
+});
+
+loadSession().catch(() => showAuth());
