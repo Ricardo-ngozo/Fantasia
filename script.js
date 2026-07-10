@@ -656,7 +656,6 @@ $("#storyForm").addEventListener("submit", async (event) => {
 });
 
 $("#searchToggle").addEventListener("click", () => $("#searchStrip").classList.toggle("hidden"));
-$("#privacyShortcut").addEventListener("click", () => renderPanel("privacy"));
 $("#searchInput").addEventListener("input", () => renderMessages(true));
 $("#searchType").addEventListener("change", () => renderMessages(true));
 $("#logoutBtn").addEventListener("click", () => signOut());

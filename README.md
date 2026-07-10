@@ -30,7 +30,7 @@ Your partner cannot use `file:///C:/...` from far away. Fantasia must run on a m
 Good options:
 
 - Deploy it to a Node host such as Render, Railway, Fly.io, a VPS, or your own server.
-- Set `PORT` if the host requires it.
+- Render can start the app with `npm start` and provides `PORT` automatically.
 - Use HTTPS. Camera, microphone, and screen sharing require HTTPS on real domains.
 - Share the public URL with your partner.
 

@@ -59,6 +59,12 @@
       "userId": "u_me",
       "createdAt": "2026-07-10T15:58:05.273Z",
       "expiresAt": "2026-08-09T15:58:05.273Z"
+    },
+    {
+      "token": "d7f71c11d042ef924ba427bc3a458b28bcb27c97168e3d941937f5899b9ba995",
+      "userId": "u_me",
+      "createdAt": "2026-07-10T16:05:46.150Z",
+      "expiresAt": "2026-08-09T16:05:46.150Z"
     }
   ],
   "messages": [
@@ -208,13 +214,463 @@
       "poll": null,
       "expiresAt": null,
       "editedAt": null
+    },
+    {
+      "id": "msg_ee3ab4d5-8fe4-4c79-9f34-c65488c0e87a",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:04:35.432Z",
+      "deliveredAt": "2026-07-10T16:04:35.432Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_bbbc6369-f8f7-4931-bbad-1a2db9cb0a7a",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:04:40.056Z",
+      "deliveredAt": "2026-07-10T16:04:40.056Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_996d68bb-3a87-40f8-b8db-0e1c59735c32",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:05:14.441Z",
+      "deliveredAt": "2026-07-10T16:05:14.441Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_1a427b46-9814-4870-a243-4668e9e523fa",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:06:19.791Z",
+      "deliveredAt": "2026-07-10T16:06:19.791Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_33be0018-5f4b-4364-b6c6-f0ea7157d4c7",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:07:05.900Z",
+      "deliveredAt": "2026-07-10T16:07:05.900Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_ef74eb71-ebc5-416e-98cb-8cd75a143898",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:07:19.219Z",
+      "deliveredAt": "2026-07-10T16:07:19.219Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_f949c0fa-8eb2-448f-9009-f4a08be8efa1",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:07:22.351Z",
+      "deliveredAt": "2026-07-10T16:07:22.351Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_de9642ca-0e28-4c8a-8d40-3970867c6eb9",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:07:22.471Z",
+      "deliveredAt": "2026-07-10T16:07:22.471Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_c4647051-f496-4885-abbb-0be0be50ba47",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:07:54.403Z",
+      "deliveredAt": "2026-07-10T16:07:54.403Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_c265a720-b892-435f-a6ee-38034f96d7fd",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:08:07.699Z",
+      "deliveredAt": "2026-07-10T16:08:07.699Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_be44237c-9d0f-4e71-a268-f0c08e5c54a9",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:08:23.800Z",
+      "deliveredAt": "2026-07-10T16:08:23.800Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_848c281a-fd14-4927-9f83-d8cb9ce0eaa3",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:09:21.417Z",
+      "deliveredAt": "2026-07-10T16:09:21.417Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_c9b692ce-4933-4382-84ca-668ff9bf8aeb",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:10:21.898Z",
+      "deliveredAt": "2026-07-10T16:10:21.898Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_a1a90fdb-2ea0-4c24-9c50-08526dda4ecc",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:10:35.203Z",
+      "deliveredAt": "2026-07-10T16:10:35.203Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_d4cacce6-db70-4e36-8e08-840de1805ec8",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:10:48.812Z",
+      "deliveredAt": "2026-07-10T16:10:48.812Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_d218675d-1c01-4611-b854-fce249dfa1a9",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:10:54.535Z",
+      "deliveredAt": "2026-07-10T16:10:54.535Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_d73114bb-e900-42c1-89c2-310656370d21",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:12:47.949Z",
+      "deliveredAt": "2026-07-10T16:12:47.949Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_c6dc19f0-bdd3-41d8-9d04-5bc7c7b51bac",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:13:10.369Z",
+      "deliveredAt": "2026-07-10T16:13:10.369Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_bdd6e44f-33d1-4674-a97a-e375b04a9107",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:14:56.063Z",
+      "deliveredAt": "2026-07-10T16:14:56.063Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_253d1b6b-7d9f-4cdf-8ad7-4e04eaa18d94",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:23:29.973Z",
+      "deliveredAt": "2026-07-10T16:23:29.975Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
+    },
+    {
+      "id": "msg_5787ae5f-965b-433d-9f15-31c1a71bd007",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:24:02.244Z",
+      "deliveredAt": "2026-07-10T16:24:02.244Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
     }
   ],
-  "stories": [],
+  "stories": [
+    {
+      "id": "story_ea77badb-ca64-426c-894e-856d44d19f08",
+      "userId": "u_me",
+      "text": "money",
+      "views": [],
+      "createdAt": "2026-07-10T16:14:42.137Z",
+      "expiresAt": "2026-07-11T16:14:42.137Z"
+    }
+  ],
   "presence": {
     "u_me": {
       "status": "online",
-      "lastSeenAt": "2026-07-10T16:02:45.639Z"
+      "lastSeenAt": "2026-07-10T16:16:57.872Z"
     },
     "u_partner": {
       "status": "online",
@@ -342,6 +798,13 @@
         "messageId": "msg_83594659-f28e-411b-8f5c-1b5b4af113ec"
       },
       "createdAt": "2026-07-10T15:58:05.443Z"
+    },
+    {
+      "id": "audit_df150c86-0131-426f-b934-7027229924cc",
+      "userId": "u_me",
+      "action": "login",
+      "payload": {},
+      "createdAt": "2026-07-10T16:05:46.150Z"
     }
   ]
 }

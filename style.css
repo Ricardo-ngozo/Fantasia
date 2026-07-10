@@ -36,7 +36,7 @@ body[data-theme="light"] {
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -48,7 +48,7 @@ body {
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: 0;
-  overflow: hidden;
+  overflow: auto;
   transition: background 220ms ease, color 220ms ease;
 }
 
@@ -272,7 +272,6 @@ svg {
   background: rgba(16, 16, 20, 0.9);
   backdrop-filter: blur(24px);
   box-shadow: var(--shadow);
-  overflow: hidden;
 }
 
 .conversation-column {
@@ -999,12 +998,6 @@ svg {
   animation: spin 850ms linear infinite;
 }
 
-.shortcut-hint {
-  color: var(--muted);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }

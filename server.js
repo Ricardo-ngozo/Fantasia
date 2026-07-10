@@ -91,7 +91,7 @@ function defaultDb() {
         id: "u_me",
         username: process.env.FANTASIA_ME_USERNAME || "me",
         displayName: process.env.FANTASIA_ME_NAME || "Me",
-        avatar: "/assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",
+        avatar: "/assets/ChatGPT Image May 14, 2026, 10_57_41 AM.png",
         passwordHash: hashPassword(mePassword),
         createdAt: now()
       },
@@ -99,7 +99,7 @@ function defaultDb() {
         id: "u_partner",
         username: process.env.FANTASIA_PARTNER_USERNAME || "partner",
         displayName: process.env.FANTASIA_PARTNER_NAME || "Partner",
-        avatar: "/assests/png (3)",
+        avatar: "/assets/png (3)",
         passwordHash: hashPassword(partnerPassword),
         createdAt: now()
       }
