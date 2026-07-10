@@ -11,7 +11,7 @@ node server.js
 Open:
 
 ```text
-http://localhost:5173
+http://localhost:5180
 ```
 
 The first server start creates two accounts:
@@ -43,7 +43,7 @@ FANTASIA_ME_NAME=Your Name
 FANTASIA_PARTNER_USERNAME=partnername
 FANTASIA_PARTNER_PASSWORD=another-long-private-password
 FANTASIA_PARTNER_NAME=Partner Name
-PORT=5173
+PORT=5180
 ```
 
 ## What Works

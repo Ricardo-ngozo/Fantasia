@@ -5,7 +5,7 @@
       "username": "me",
       "displayName": "Me",
       "avatar": "/assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",
-      "passwordHash": "496000bae10437c9c8270d14864d3aac:416bc1ce8a6bd4f4f6583c11d81736fee95db694ed1aa2e162aacbd699501a3e",
+      "passwordHash": "752150fbec27ed5bf7a69e68b854fcee:2191be38d6e4abc7a8619266eb6b7511d76034ec8103a547cd18158b8b36af45",
       "createdAt": "2026-07-10T13:16:42.980Z"
     },
     {
@@ -13,14 +13,36 @@
       "username": "partner",
       "displayName": "Partner",
       "avatar": "/assests/png (3)",
-      "passwordHash": "457e26485513791fb8bf4eec47bd32f4:c5d7c07a0d0231dff61b198b7d77c4ea9d4ac23938b4e683bf34281d49e9d6d0",
+      "passwordHash": "4ef9f910405dee13bbe4e84e2db14e86:b0cff210fe1291a5a3a7070a67cc1064b8772478e837c2bfb5cfb1f66cc1150c",
       "createdAt": "2026-07-10T13:16:43.296Z"
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "token": "b5edf9b338a6d97441ea4a1f1aa67c93d0e993ad7877e08d4af4c06e52a8f70f",
+      "userId": "u_me",
+      "createdAt": "2026-07-10T15:18:30.007Z",
+      "expiresAt": "2026-08-09T15:18:30.008Z"
+    },
+    {
+      "token": "fb3209e769bfd21eb8aac257e4b6b624b612c8764041b14234afa97f8858d279",
+      "userId": "u_partner",
+      "createdAt": "2026-07-10T15:19:48.110Z",
+      "expiresAt": "2026-08-09T15:19:48.112Z"
+    }
+  ],
   "messages": [],
   "stories": [],
-  "presence": {},
+  "presence": {
+    "u_me": {
+      "status": "online",
+      "lastSeenAt": "2026-07-10T15:18:30.009Z"
+    },
+    "u_partner": {
+      "status": "online",
+      "lastSeenAt": "2026-07-10T15:19:48.112Z"
+    }
+  },
   "settings": {
     "appLockSetting": false,
     "screenshotAlerts": true,
@@ -28,5 +50,48 @@
     "incognitoTyping": false,
     "keyFingerprint": "FA-34 3C 2A 62 C2 21 20 B4"
   },
-  "audit": []
+  "audit": [
+    {
+      "id": "audit_74c68c5e-d0e7-40d8-91e4-3c41c576e346",
+      "userId": "u_me",
+      "action": "login",
+      "payload": {},
+      "createdAt": "2026-07-10T15:18:30.012Z"
+    },
+    {
+      "id": "audit_d750283a-9697-43fa-89d8-d9ea99c7f6fb",
+      "userId": "u_me",
+      "action": "password:change",
+      "payload": {},
+      "createdAt": "2026-07-10T15:18:30.119Z"
+    },
+    {
+      "id": "audit_056a1bf4-3dd7-4f6c-9e9c-af0bc01c076d",
+      "userId": "u_me",
+      "action": "password:change",
+      "payload": {},
+      "createdAt": "2026-07-10T15:18:30.223Z"
+    },
+    {
+      "id": "audit_e20b2feb-c644-4fac-963b-b558697029cd",
+      "userId": "u_partner",
+      "action": "login",
+      "payload": {},
+      "createdAt": "2026-07-10T15:19:48.113Z"
+    },
+    {
+      "id": "audit_cc3d749e-7a00-42ed-a853-763b4b5eb84d",
+      "userId": "u_partner",
+      "action": "password:change",
+      "payload": {},
+      "createdAt": "2026-07-10T15:19:48.389Z"
+    },
+    {
+      "id": "audit_0dc4cfe6-c91d-4e9f-b17c-df586c45e6ba",
+      "userId": "u_partner",
+      "action": "password:change",
+      "payload": {},
+      "createdAt": "2026-07-10T15:19:48.592Z"
+    }
+  ]
 }

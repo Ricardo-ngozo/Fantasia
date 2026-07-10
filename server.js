@@ -8,7 +8,7 @@ const dataDir = path.join(root, "data");
 const uploadDir = path.join(root, "uploads");
 const backupDir = path.join(root, "backups");
 const dbPath = path.join(dataDir, "fantasia-db.json");
-const port = Number(process.env.PORT || 5173);
+const port = Number(process.env.PORT || 5180);
 
 for (const dir of [dataDir, uploadDir, backupDir]) fs.mkdirSync(dir, { recursive: true });
 
@@ -521,6 +521,6 @@ const server = http.createServer((req, res) => {
   else routeStatic(req, res);
 });
 
-server.listen(port, "0.0.0.0", () => {
+server.listen(port, () => {
   console.log(`Fantasia is running at http://localhost:${port}`);
 });

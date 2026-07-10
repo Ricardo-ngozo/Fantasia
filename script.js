@@ -267,11 +267,12 @@ function renderSaved() {
 }
 
 function renderSettings() {
-  $("#appLockSetting").checked = !!app.settings.appLock;
+  $("#appLockSetting").checked = !!app.settings.appLockSetting;
   $("#screenshotAlerts").checked = !!app.settings.screenshotAlerts;
   $("#hideMedia").checked = !!app.settings.hideMedia;
   $("#incognitoTyping").checked = !!app.settings.incognitoTyping;
   $("#keyFingerprint").textContent = app.settings.keyFingerprint;
+  $("#passwordHelp").textContent = `You are changing the password for @${app.me.username}. Use that account's current password. Default: ${app.me.username === "me" ? "change-me-now" : "change-partner-now"}.`;
 }
 
 function renderAll(keepScroll = true) {
@@ -598,6 +599,7 @@ $("#storyForm").addEventListener("submit", async (event) => {
 });
 
 $("#searchToggle").addEventListener("click", () => $("#searchStrip").classList.toggle("hidden"));
+$("#privacyShortcut").addEventListener("click", () => renderPanel("privacy"));
 $("#searchInput").addEventListener("input", () => renderMessages(true));
 $("#searchType").addEventListener("change", () => renderMessages(true));
 $("#logoutBtn").addEventListener("click", () => signOut());
@@ -627,12 +629,26 @@ $("#cameraBtn").addEventListener("click", () => {
 
 $("#passwordForm").addEventListener("submit", async (event) => {
   event.preventDefault();
+  const status = $("#passwordStatus");
+  status.className = "form-status";
+  status.textContent = "";
+  const oldPassword = $("#oldPassword").value;
+  const newPassword = $("#newPassword").value;
+  if (newPassword.length < 10) {
+    status.classList.add("error");
+    status.textContent = "New password must be at least 10 characters.";
+    return;
+  }
   try {
-    await api("/api/password", { method: "POST", body: JSON.stringify({ oldPassword: $("#oldPassword").value, newPassword: $("#newPassword").value }) });
+    await api("/api/password", { method: "POST", body: JSON.stringify({ oldPassword, newPassword }) });
     $("#oldPassword").value = "";
     $("#newPassword").value = "";
+    status.classList.add("success");
+    status.textContent = "Password changed. Use the new password next time you sign in.";
     showToast("Password changed.");
   } catch (error) {
+    status.classList.add("error");
+    status.textContent = error.message;
     showToast(error.message);
   }
 });

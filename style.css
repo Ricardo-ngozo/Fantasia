@@ -67,8 +67,25 @@ body {
 }
 
 .brand-lockup p,
-.setup-note {
+.setup-note,
+.form-help,
+.form-status {
   color: var(--muted);
+}
+
+.form-help,
+.form-status {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.form-status.success {
+  color: var(--partner-accent);
+}
+
+.form-status.error {
+  color: var(--rose);
 }
 
 .auth-form,
@@ -132,7 +149,7 @@ svg {
 
 .app-shell {
   display: grid;
-  grid-template-columns: 76px 1fr;
+  grid-template-columns: 116px 1fr;
   height: 100vh;
   padding: 14px;
   gap: 14px;
@@ -185,8 +202,19 @@ svg {
 }
 
 .rail-btn {
-  width: 48px;
-  height: 48px;
+  width: 92px;
+  min-height: 54px;
+  padding: 6px;
+  gap: 4px;
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.rail-btn span {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.1;
 }
 
 .rail-btn:hover,
@@ -599,6 +627,7 @@ svg {
 .ghost-btn,
 .send-btn,
 .primary-wide,
+.text-btn,
 .quick-grid button,
 .ai-actions button,
 .segmented button,
@@ -613,6 +642,12 @@ svg {
 .send-btn,
 .primary-wide {
   background: linear-gradient(135deg, var(--sender-accent), var(--rose));
+  font-weight: 800;
+}
+
+.text-btn {
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.36);
   font-weight: 800;
 }
 
@@ -964,6 +999,12 @@ svg {
 
   .rail-nav {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .rail-btn {
+    width: 76px;
   }
 
   .workspace {

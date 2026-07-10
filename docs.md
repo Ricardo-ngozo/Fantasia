@@ -52,6 +52,8 @@ Run locally:
 node server.js
 ```
 
+Open `http://localhost:5180`.
+
 For internet use, deploy to a Node host and use HTTPS. WebRTC calls, microphone access, camera access, and screen sharing require HTTPS outside localhost.
 
 Set these before the first launch:
