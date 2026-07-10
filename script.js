@@ -14,6 +14,9 @@ const app = {
   mediaFilter: "all",
   eventSource: null,
   typingTimer: null,
+  renderFrame: null,
+  notifiedIds: new Set(),
+  theme: localStorage.getItem("fantasia_theme") || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"),
   call: {
     peer: null,
     localStream: null,
@@ -75,7 +78,22 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.remove("hidden");
   clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(() => toast.classList.add("hidden"), 2400);
+  showToast.timer = setTimeout(() => toast.classList.add("hidden"), 2600);
+}
+
+function setLoading(message = "Preparing Fantasia…") {
+  const overlay = $("#loadingOverlay");
+  const text = $("#loadingText");
+  text.textContent = message;
+  overlay.classList.toggle("hidden", !message);
+}
+
+function applyTheme(theme = app.theme) {
+  document.body.dataset.theme = theme;
+  app.theme = theme;
+  localStorage.setItem("fantasia_theme", theme);
+  const toggle = $("#themeToggle");
+  if (toggle) toggle.textContent = theme === "light" ? "☾" : "☀";
 }
 
 function showApp() {
@@ -100,18 +118,29 @@ async function signOut(callServer = true) {
 }
 
 async function loadSession() {
-  if (!app.token) return showAuth();
-  const data = await api("/api/session");
-  app.me = data.me;
-  app.partner = data.partner;
-  app.messages = data.messages;
-  app.stories = data.stories;
-  app.settings = data.settings;
-  app.presence = data.presence;
-  showApp();
-  renderAll();
-  connectEvents();
-  await api("/api/presence", { method: "POST", body: JSON.stringify({ status: "online" }) });
+  setLoading("Connecting to Fantasia…");
+  if (!app.token) {
+    setLoading(false);
+    return showAuth();
+  }
+  try {
+    const data = await api("/api/session");
+    app.me = data.me;
+    app.partner = data.partner;
+    app.messages = data.messages;
+    app.stories = data.stories;
+    app.settings = data.settings;
+    app.presence = data.presence;
+    showApp();
+    renderAll();
+    connectEvents();
+    await api("/api/presence", { method: "POST", body: JSON.stringify({ status: "online" }) });
+  } catch (error) {
+    showToast(error.message || "Unable to load session.");
+    showAuth();
+  } finally {
+    setLoading(false);
+  }
 }
 
 function connectEvents() {
@@ -123,6 +152,17 @@ function connectEvents() {
     app.stories = data.stories;
     app.settings = data.settings;
     app.presence = data.presence;
+    const newMessages = app.messages.filter((message) => message.senderId !== app.me?.id && !app.notifiedIds.has(message.id));
+    if (newMessages.length && document.hidden) {
+      const latest = newMessages.at(-1);
+      if (latest?.text) {
+        showToast(`${app.partner.displayName}: ${latest.text.slice(0, 80)}`);
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("New Fantasia message", { body: latest.text.slice(0, 140) });
+        }
+      }
+    }
+    newMessages.forEach((message) => app.notifiedIds.add(message.id));
     renderAll(false);
   });
   app.eventSource.addEventListener("typing", (event) => {
@@ -276,12 +316,16 @@ function renderSettings() {
 }
 
 function renderAll(keepScroll = true) {
-  renderIdentity();
-  renderMessages(keepScroll);
-  renderStories();
-  renderMedia();
-  renderSaved();
-  renderSettings();
+  if (app.renderFrame) return;
+  app.renderFrame = requestAnimationFrame(() => {
+    app.renderFrame = null;
+    renderIdentity();
+    renderMessages(keepScroll);
+    renderStories();
+    renderMedia();
+    renderSaved();
+    renderSettings();
+  });
 }
 
 async function fileToPayload(file) {
@@ -302,7 +346,13 @@ function renderAttachmentPreview() {
 async function sendMessage(extra = {}) {
   const text = extra.text ?? $("#messageInput").value.trim();
   if (!text && !app.attachments.length && !extra.poll) return;
-  await api("/api/messages", {
+  const sendBtn = $(".send-btn");
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+  }
+  try {
+    await api("/api/messages", {
     method: "POST",
     body: JSON.stringify({
       text,
@@ -313,11 +363,17 @@ async function sendMessage(extra = {}) {
       poll: extra.poll || null
     })
   });
-  app.attachments = [];
-  app.replyTo = null;
-  $("#messageInput").value = "";
-  $("#replyPreview").classList.add("hidden");
-  renderAttachmentPreview();
+    app.attachments = [];
+    app.replyTo = null;
+    $("#messageInput").value = "";
+    $("#replyPreview").classList.add("hidden");
+    renderAttachmentPreview();
+  } finally {
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send";
+    }
+  }
 }
 
 async function handleMessageAction(messageId, action) {
@@ -353,9 +409,10 @@ async function handleMessageAction(messageId, action) {
 }
 
 function showTyping(text) {
-  $("#typingLine").textContent = text;
+  const typingLine = $("#typingLine");
+  typingLine.textContent = text;
   clearTimeout(showTyping.timer);
-  showTyping.timer = setTimeout(() => $("#typingLine").textContent = "", 1600);
+  showTyping.timer = setTimeout(() => typingLine.textContent = "", 1800);
 }
 
 async function updateSetting(key, value) {
@@ -604,6 +661,7 @@ $("#searchInput").addEventListener("input", () => renderMessages(true));
 $("#searchType").addEventListener("change", () => renderMessages(true));
 $("#logoutBtn").addEventListener("click", () => signOut());
 $("#exportBtn").addEventListener("click", () => window.open(`/api/export?token=${encodeURIComponent(app.token)}`));
+$("#themeToggle").addEventListener("click", () => applyTheme(app.theme === "dark" ? "light" : "dark"));
 $("#backupBtn").addEventListener("click", async () => showToast((await api("/api/backup", { method: "POST", body: "{}" })).message));
 $("#restoreBtn").addEventListener("click", async () => {
   try {
@@ -673,6 +731,31 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+document.addEventListener("keydown", (event) => {
+  const tag = document.activeElement?.tagName;
+  const isTypingField = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+  const isMod = event.ctrlKey || event.metaKey;
+  if (isMod && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    $("#searchInput").focus();
+    return;
+  }
+  if (isMod && event.key === "Enter") {
+    event.preventDefault();
+    $("#composer").requestSubmit();
+    return;
+  }
+  if (isMod && event.key.toLowerCase() === "p") {
+    event.preventDefault();
+    renderPanel("privacy");
+    return;
+  }
+  if (event.key === "/" && !isTypingField) {
+    event.preventDefault();
+    $("#messageInput").focus();
+  }
+});
+
 window.addEventListener("beforeunload", () => {
   if (app.token) {
     fetch("/api/presence/offline", {
@@ -684,4 +767,8 @@ window.addEventListener("beforeunload", () => {
   }
 });
 
+applyTheme(app.theme);
+if (Notification.permission === "default") {
+  Notification.requestPermission().catch(() => {});
+}
 loadSession().catch(() => showAuth());
