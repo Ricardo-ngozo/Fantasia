@@ -43,10 +43,10 @@
       "expiresAt": "2026-08-09T15:32:30.324Z"
     },
     {
-      "token": "c2d124d2590b12d9b67ff7f802e22e7625d9c109a56c3e76c49d252acc683a1a",
+      "token": "563ac8f7b98a22b12aec302e15dee621e10fcd64054dbf04e5c0b163f84d2116",
       "userId": "u_me",
-      "createdAt": "2026-07-10T15:46:29.800Z",
-      "expiresAt": "2026-08-09T15:46:29.801Z"
+      "createdAt": "2026-07-10T15:49:30.228Z",
+      "expiresAt": "2026-08-09T15:49:30.229Z"
     }
   ],
   "messages": [
@@ -114,15 +114,15 @@
       "editedAt": null
     },
     {
-      "id": "msg_7305bf48-e3bf-4bf4-9851-75d3e938c1f7",
+      "id": "msg_5ef28652-5577-466b-be66-cff877403655",
       "senderId": "u_me",
-      "text": "restore-test-1783698389906",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
       "attachments": [],
       "replyTo": null,
       "viewOnce": false,
       "status": "sent",
-      "createdAt": "2026-07-10T15:46:29.913Z",
-      "deliveredAt": "2026-07-10T15:46:29.913Z",
+      "createdAt": "2026-07-10T15:47:27.161Z",
+      "deliveredAt": "2026-07-10T15:47:27.161Z",
       "readBy": [
         "u_me"
       ],
@@ -139,7 +139,7 @@
   "presence": {
     "u_me": {
       "status": "online",
-      "lastSeenAt": "2026-07-10T15:46:29.801Z"
+      "lastSeenAt": "2026-07-10T15:49:30.230Z"
     },
     "u_partner": {
       "status": "online",
@@ -230,20 +230,11 @@
       "createdAt": "2026-07-10T15:35:34.136Z"
     },
     {
-      "id": "audit_6572c90b-edd0-41cd-8f08-34be6ba78fb5",
+      "id": "audit_62a9ce4c-1a72-4fb1-ae4a-8e177b2961f4",
       "userId": "u_me",
       "action": "login",
       "payload": {},
-      "createdAt": "2026-07-10T15:46:29.802Z"
-    },
-    {
-      "id": "audit_e47a5b56-9017-40f6-9418-14c4595e4bb6",
-      "userId": "u_me",
-      "action": "message:create",
-      "payload": {
-        "messageId": "msg_7305bf48-e3bf-4bf4-9851-75d3e938c1f7"
-      },
-      "createdAt": "2026-07-10T15:46:29.913Z"
+      "createdAt": "2026-07-10T15:49:30.231Z"
     }
   ]
 }

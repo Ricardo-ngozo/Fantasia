@@ -605,6 +605,15 @@ $("#searchType").addEventListener("change", () => renderMessages(true));
 $("#logoutBtn").addEventListener("click", () => signOut());
 $("#exportBtn").addEventListener("click", () => window.open(`/api/export?token=${encodeURIComponent(app.token)}`));
 $("#backupBtn").addEventListener("click", async () => showToast((await api("/api/backup", { method: "POST", body: "{}" })).message));
+$("#restoreBtn").addEventListener("click", async () => {
+  try {
+    const result = await api("/api/restore", { method: "POST", body: "{}" });
+    showToast(result.message);
+    await loadSession();
+  } catch (error) {
+    showToast(error.message);
+  }
+});
 $("#clearLocalBtn").addEventListener("click", () => { localStorage.clear(); showToast("Local cache cleared."); });
 $("#savedBtn").addEventListener("click", () => $("#savedPanel").scrollIntoView({ behavior: "smooth" }));
 
