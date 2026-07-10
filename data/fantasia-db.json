@@ -187,13 +187,34 @@
       "poll": null,
       "expiresAt": null,
       "editedAt": null
+    },
+    {
+      "id": "msg_2b23d102-83d5-4874-9dc9-9a167eeb13e3",
+      "senderId": "u_me",
+      "text": "The app was backgrounded on one device. A screenshot or screen recording may have happened.",
+      "attachments": [],
+      "replyTo": null,
+      "viewOnce": false,
+      "status": "sent",
+      "createdAt": "2026-07-10T16:02:45.418Z",
+      "deliveredAt": "2026-07-10T16:02:45.418Z",
+      "readBy": [
+        "u_me"
+      ],
+      "hiddenFor": [],
+      "reactions": {},
+      "pinned": false,
+      "starred": false,
+      "poll": null,
+      "expiresAt": null,
+      "editedAt": null
     }
   ],
   "stories": [],
   "presence": {
     "u_me": {
       "status": "online",
-      "lastSeenAt": "2026-07-10T15:58:05.273Z"
+      "lastSeenAt": "2026-07-10T16:02:45.639Z"
     },
     "u_partner": {
       "status": "online",
