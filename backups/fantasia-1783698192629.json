@@ -91,27 +91,6 @@
       "poll": null,
       "expiresAt": null,
       "editedAt": null
-    },
-    {
-      "id": "msg_b7b01a93-f579-471f-a105-71b4f2432940",
-      "senderId": "u_me",
-      "text": "delete-me-1783698192636",
-      "attachments": [],
-      "replyTo": null,
-      "viewOnce": false,
-      "status": "sent",
-      "createdAt": "2026-07-10T15:43:12.646Z",
-      "deliveredAt": "2026-07-10T15:43:12.646Z",
-      "readBy": [
-        "u_me"
-      ],
-      "hiddenFor": [],
-      "reactions": {},
-      "pinned": false,
-      "starred": false,
-      "poll": null,
-      "expiresAt": null,
-      "editedAt": null
     }
   ],
   "stories": [],
@@ -223,24 +202,6 @@
         "messageId": "msg_0b6e3728-e947-4d15-ad0a-744960036289"
       },
       "createdAt": "2026-07-10T15:43:12.622Z"
-    },
-    {
-      "id": "audit_66b216b4-a3ef-4450-929e-f5929aece4b6",
-      "userId": "u_me",
-      "action": "backup:create",
-      "payload": {
-        "file": "fantasia-1783698192629.json"
-      },
-      "createdAt": "2026-07-10T15:43:12.634Z"
-    },
-    {
-      "id": "audit_343671a9-7ddc-43e1-a2f5-210f19249da5",
-      "userId": "u_me",
-      "action": "message:create",
-      "payload": {
-        "messageId": "msg_b7b01a93-f579-471f-a105-71b4f2432940"
-      },
-      "createdAt": "2026-07-10T15:43:12.646Z"
     }
   ]
 }
