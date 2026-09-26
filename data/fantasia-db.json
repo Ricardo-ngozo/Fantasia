@@ -33,56 +33,7 @@
       "createdAt": "2026-07-10T13:16:43.296Z"
     }
   ],
-  "sessions": [
-    {
-      "token": "b5edf9b338a6d97441ea4a1f1aa67c93d0e993ad7877e08d4af4c06e52a8f70f",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:18:30.007Z",
-      "expiresAt": "2026-08-09T15:18:30.008Z"
-    },
-    {
-      "token": "fb3209e769bfd21eb8aac257e4b6b624b612c8764041b14234afa97f8858d279",
-      "userId": "u_partner",
-      "createdAt": "2026-07-10T15:19:48.110Z",
-      "expiresAt": "2026-08-09T15:19:48.112Z"
-    },
-    {
-      "token": "32043d1e1c96a741827e0102394a622e157ba2eca8e3a6e9a3731f74390e9114",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:31:03.312Z",
-      "expiresAt": "2026-08-09T15:31:03.313Z"
-    },
-    {
-      "token": "1cfa37d09538988c98ff651e10c8350a407d1afc478437bbe1246120eb9ee729",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:32:30.324Z",
-      "expiresAt": "2026-08-09T15:32:30.324Z"
-    },
-    {
-      "token": "563ac8f7b98a22b12aec302e15dee621e10fcd64054dbf04e5c0b163f84d2116",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:49:30.228Z",
-      "expiresAt": "2026-08-09T15:49:30.229Z"
-    },
-    {
-      "token": "6ba36a765a57f6eeee50f160d8b898d890f9012648ee11ea3b24536c43869205",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:54:24.205Z",
-      "expiresAt": "2026-08-09T15:54:24.205Z"
-    },
-    {
-      "token": "edba0378537009acc71ecdbd4ef53bed1fe6f8b05ee1d221ca53cd359432e92a",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T15:58:05.273Z",
-      "expiresAt": "2026-08-09T15:58:05.273Z"
-    },
-    {
-      "token": "d7f71c11d042ef924ba427bc3a458b28bcb27c97168e3d941937f5899b9ba995",
-      "userId": "u_me",
-      "createdAt": "2026-07-10T16:05:46.150Z",
-      "expiresAt": "2026-08-09T16:05:46.150Z"
-    }
-  ],
+  "sessions": [],
   "messages": [
     {
       "id": "msg_91eaafc8-39c1-4cbe-afc9-efab5250bb7d",
@@ -676,8 +627,8 @@
   "stories": [],
   "presence": {
     "u_me": {
-      "status": "online",
-      "lastSeenAt": "2026-07-10T16:16:57.872Z"
+      "status": "offline",
+      "lastSeenAt": "2026-09-26T14:21:29.080Z"
     },
     "u_partner": {
       "status": "online",
@@ -696,7 +647,64 @@
   "moodEntries": [],
   "loveNotes": [],
   "dateIdeas": [],
-  "compliments": [],
+  "compliments": [
+    {
+      "id": "cp_6513e65c-cb07-491a-8f11-66350af410f5",
+      "text": "You make ordinary days feel special.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.254Z"
+    },
+    {
+      "id": "cp_87ccc716-fd2e-4c9d-a121-8b3a144e9560",
+      "text": "Your smile is my favourite thing in the world.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.341Z"
+    },
+    {
+      "id": "cp_38f8e1d6-f926-4a8e-b376-1d9689fd9b23",
+      "text": "Being with you feels like home.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.428Z"
+    },
+    {
+      "id": "cp_bddc2131-1089-45c8-a81a-dc096c21ef86",
+      "text": "You're the reason I look forward to every day.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.493Z"
+    },
+    {
+      "id": "cp_868b9166-dac3-41cd-a27f-58f8346bdde9",
+      "text": "You make everything better just by being you.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.555Z"
+    },
+    {
+      "id": "cp_27563185-dff0-4738-92ad-3dd531a721a2",
+      "text": "I love the way you laugh.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.617Z"
+    },
+    {
+      "id": "cp_7760c2ee-c28b-47c5-9126-f3a100e86061",
+      "text": "You're my favourite person, always.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.705Z"
+    },
+    {
+      "id": "cp_4f6ce576-9192-47df-834f-a7d3409c8b06",
+      "text": "Life is so much sweeter with you in it.",
+      "category": "love",
+      "createdBy": "u_me",
+      "createdAt": "2026-09-26T14:18:38.813Z"
+    }
+  ],
   "games": {
     "sessions": [],
     "stats": {}
@@ -835,6 +843,38 @@
       "action": "login",
       "payload": {},
       "createdAt": "2026-07-10T16:05:46.150Z"
+    },
+    {
+      "id": "audit_9a48e2ac-cfa5-4f30-96a5-7e9d1f66e7db",
+      "userId": "u_me",
+      "action": "login",
+      "payload": {},
+      "createdAt": "2026-09-26T14:18:38.064Z"
+    },
+    {
+      "id": "audit_83592fcb-8a16-410e-a4f3-9487b87357a5",
+      "userId": "u_me",
+      "action": "settings:update",
+      "payload": {
+        "theme": "rose"
+      },
+      "createdAt": "2026-09-26T14:18:56.126Z"
+    },
+    {
+      "id": "audit_710ef3a5-c26c-4cee-85f6-7afa0781b87a",
+      "userId": "u_me",
+      "action": "settings:update",
+      "payload": {
+        "theme": "light"
+      },
+      "createdAt": "2026-09-26T14:18:58.909Z"
+    },
+    {
+      "id": "audit_eaefb094-1868-44f4-8bea-d4b3e0b42c05",
+      "userId": "u_me",
+      "action": "logout",
+      "payload": {},
+      "createdAt": "2026-09-26T14:21:29.080Z"
     }
   ]
 }
