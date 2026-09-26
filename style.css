@@ -834,7 +834,11 @@ a { color: inherit; text-decoration: none; }
 .us-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.8); }
 .us-avatar-1 { margin-right: -12px; z-index: 1; }
 .us-avatar-2 { margin-left: -12px; z-index: 1; }
-.us-heart-center { font-size: 22px; z-index: 2; animation: heartPulse 1.8s ease-in-out infinite; }
+.us-heart-center {
+  font-size: 22px; z-index: 2; animation: heartPulse 1.8s ease-in-out infinite;
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+}
+.us-heart-center svg { width: 28px; height: 28px; }
 @keyframes heartPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
 .us-title { font-size: 20px; font-weight: 700; color: white; margin-bottom: 20px; position: relative; }
 .relationship-counter {
@@ -859,7 +863,8 @@ a { color: inherit; text-decoration: none; }
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   padding: 10px 4px;
 }
-.stat-icon { font-size: 18px; }
+.stat-icon { font-size: 18px; display:flex; align-items:center; justify-content:center; }
+.stat-icon svg { width:22px; height:22px; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .stat-num { font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1; }
 .stat-label { font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.2; }
 
@@ -894,7 +899,7 @@ a { color: inherit; text-decoration: none; }
 }
 .us-card:hover { background: var(--accent-light); color: var(--accent); box-shadow: var(--shadow); }
 .us-card:active { transform: scale(0.95); }
-.us-card-icon { font-size: 22px; }
+.us-card-icon { font-size: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
 
 /* Memory of the day */
 .motd-card { margin: 0 12px 12px; }
@@ -1010,7 +1015,8 @@ a { color: inherit; text-decoration: none; }
   transition: box-shadow 0.2s, transform 0.1s;
 }
 .game-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.game-icon { font-size: 32px; margin-bottom: 8px; }
+.game-icon { width: 48px; height: 48px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); border-radius: 14px; }
+.game-icon svg { width: 26px; height: 26px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .game-card h3 { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
 .game-card p { font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4; }
 .game-arena {
@@ -1089,20 +1095,67 @@ a { color: inherit; text-decoration: none; }
 }
 .love-tabs::-webkit-scrollbar { height: 0; }
 .love-tab-btn {
-  padding: 12px 14px; white-space: nowrap;
-  font-size: 13px; font-weight: 500;
+  padding: 10px 12px; white-space: nowrap;
+  font-size: 12px; font-weight: 500;
   color: var(--text-secondary);
   border-bottom: 2px solid transparent;
   transition: color 0.15s, border-color 0.15s;
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
 }
+.love-tab-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 .love-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.love-tab-btn.active svg { stroke: var(--accent); }
 .love-sub { display: none; flex: 1; overflow-y: auto; flex-direction: column; }
 .love-sub.active { display: flex; }
+
+/* Love big buttons — SVG style */
+.lbb-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lbb-icon svg { width: 26px; height: 26px; }
+
+/* Mood SVG face buttons */
+.mood-svg { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.mood-svg svg { width: 24px; height: 24px; }
+
+/* Milestone icon row */
+.ms-icon-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.ms-icon-row .emoji-sel-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--border-input); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.ms-icon-row .emoji-sel-btn svg { width: 18px; height: 18px; stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ms-icon-row .emoji-sel-btn.active { border-color: var(--accent); background: var(--accent-light); }
+.ms-icon-row .emoji-sel-btn.active svg { stroke: var(--accent); }
+
+/* Context menu with SVG icons */
+.context-menu button {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 12px 16px; text-align: left;
+  font-size: 14px; color: var(--text-primary);
+  transition: background 0.1s;
+}
+.context-menu button svg { width: 16px; height: 16px; stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.context-menu button:hover { background: var(--bg-hover); }
+.context-menu button.ctx-danger { color: #e53935; }
+.context-menu button.ctx-danger svg { stroke: #e53935; }
+
+/* Daily question header label */
+.dq-header-label { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--text-primary); }
+.dq-header-label svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Motd header row */
+.motd-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; }
+.motd-header svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Love notification icon */
+.love-notif-icon { width: 72px; height: 72px; margin: 0 auto 12px; animation: heartPulse 1s infinite; }
+.love-notif-icon svg { width: 100%; height: 100%; }
+
+/* Us card grid SVG icons */
+.us-card-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+.us-card-icon svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.us-card:hover .us-card-icon svg { stroke: var(--accent); }
 
 /* Thinking of you */
 .love-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
 .love-big-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
   padding: 16px 8px;
   background: var(--bg-hover);
   border: 2px solid var(--border);
@@ -1110,8 +1163,9 @@ a { color: inherit; text-decoration: none; }
   font-size: 11px; color: var(--text-secondary); font-weight: 500;
   transition: all 0.15s;
 }
-.love-big-btn > :first-child { font-size: 28px; }
+.love-big-btn .lbb-icon svg { stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.15s, fill 0.15s; }
 .love-big-btn:hover { background: var(--love-light); border-color: var(--love); color: var(--love); transform: scale(1.03); }
+.love-big-btn:hover .lbb-icon svg { stroke: var(--love); }
 .love-big-btn:active { transform: scale(0.96); }
 .custom-love-wrap { display: flex; flex-direction: column; gap: 8px; }
 .custom-love-wrap textarea { border: 1.5px solid var(--border-input); border-radius: var(--radius); padding: 10px 12px; font-size: 14px; color: var(--text-primary); background: var(--bg-input); resize: none; }
@@ -1197,16 +1251,19 @@ a { color: inherit; text-decoration: none; }
 .mood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
 .mood-btn {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 12px 6px;
+  padding: 10px 6px;
   background: var(--bg-hover);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   font-size: 10px; color: var(--text-secondary); font-weight: 500;
   transition: all 0.15s;
 }
-.mood-btn > :first-child { font-size: 22px; }
+.mood-btn .mood-svg { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.mood-btn .mood-svg svg { width: 24px; height: 24px; stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.15s; }
 .mood-btn:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+.mood-btn:hover .mood-svg svg { stroke: var(--accent); }
 .mood-btn.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 700; }
+.mood-btn.selected .mood-svg svg { stroke: var(--accent); }
 #moodNote { width: 100%; border: 1.5px solid var(--border-input); border-radius: var(--radius); padding: 10px 12px; font-size: 14px; color: var(--text-primary); background: var(--bg-input); resize: none; }
 .mood-history { display: flex; flex-wrap: wrap; gap: 6px; }
 .mood-chip { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: var(--bg-hover); border-radius: 999px; font-size: 12px; color: var(--text-secondary); }

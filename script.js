@@ -184,10 +184,10 @@ $("loveNotifClose").addEventListener("click",()=>$("loveNotifOverlay").classList
 
 function launchFloatingHearts() {
   const c = $("floatingHearts"); c.innerHTML="";
-  const emojis=["❤️","💕","💗","💖","💝","🌸","✨"];
+  const SVG = `<svg viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="var(--love)" opacity="0.8"/></svg>`;
   for (let i=0;i<12;i++) {
     const h=document.createElement("div"); h.className="floating-heart";
-    h.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    h.innerHTML=SVG;
     h.style.left=Math.random()*100+"%";
     h.style.animationDelay=Math.random()*1.5+"s";
     h.style.animationDuration=(2+Math.random()*2)+"s";
@@ -248,7 +248,7 @@ $$(".nav-btn,.bnav-btn").forEach(b=>b.addEventListener("click",()=>switchTab(b.d
 $$(".us-card").forEach(c=>c.addEventListener("click",()=>switchTab(c.dataset.tab, c.dataset.sub)));
 
 function updateMobileHeader(tab) {
-  const titles={chat:"Fantasia",us:"Our World ❤️",memories:"Memories",play:"Play Together",love:"Love",settings:"Settings"};
+  const titles={chat:"Fantasia",us:"Our World",memories:"Memories",play:"Play Together",love:"Love",settings:"Settings"};
   const subs={chat:app.partner?.displayName||"Partner",us:"Your private world",memories:"Your shared moments",play:"Games for two",love:"Love features",settings:"Account & preferences"};
   $("mhTitle").textContent=titles[tab]||"Fantasia";
   $("mhSub").textContent=subs[tab]||"";
@@ -323,7 +323,7 @@ function renderCounter() {
 $("setRelationshipDateBtn").addEventListener("click",()=>{ openModal("setRelDateModal"); const d=app.relationship?.startDate; if(d) $("relDateInput").value=d.slice(0,10); });
 $("saveRelDateBtn").addEventListener("click",async()=>{
   const v=$("relDateInput").value; if(!v) return;
-  try { await api("/api/relationship",{method:"PATCH",body:JSON.stringify({startDate:v})}); app.relationship.startDate=v; closeModal("setRelDateModal"); renderCounter(); showToast("Start date saved ❤️"); } catch(e){showToast(e.message);}
+  try { await api("/api/relationship",{method:"PATCH",body:JSON.stringify({startDate:v})}); app.relationship.startDate=v; closeModal("setRelDateModal"); renderCounter(); showToast("Start date saved"); } catch(e){showToast(e.message);}
 });
 
 // ── MESSAGES ─────────────────────────────────────────────────
@@ -350,7 +350,7 @@ function renderMessages() {
     if(d!==lastDate) { lastDate=d; html+=`<div class="date-sep"><span>${d===new Date().toDateString()?"Today":fmtDate(m.createdAt)}</span></div>`; }
     html+=buildBubble(m);
   });
-  list.innerHTML=html||`<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px">No messages yet. Say hello! 👋</div>`;
+  list.innerHTML=html||`<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px">No messages yet. Say hello!</div>`;
 
   // bind events
   list.querySelectorAll(".bubble").forEach(b=>{

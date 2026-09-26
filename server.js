@@ -158,15 +158,21 @@ function applyRateLimit(req, res) {
 }
 
 function loadDb() {
+  let loaded;
   if (!fs.existsSync(dbPath)) {
-    const db = defaultDb();
-    saveDb(db);
+    loaded = defaultDb();
+    saveDb(loaded);
     console.log("Fantasia created two default accounts:");
-    console.log(`  ${db.users[0].username} / ${process.env.FANTASIA_ME_PASSWORD||"change-me-now"}`);
-    console.log(`  ${db.users[1].username} / ${process.env.FANTASIA_PARTNER_PASSWORD||"change-partner-now"}`);
-    return db;
+    console.log(`  ${loaded.users[0].username} / ${process.env.FANTASIA_ME_PASSWORD||"change-me-now"}`);
+    console.log(`  ${loaded.users[1].username} / ${process.env.FANTASIA_PARTNER_PASSWORD||"change-partner-now"}`);
+  } else {
+    loaded = ensureDbShape(JSON.parse(fs.readFileSync(dbPath,"utf8")));
   }
-  return ensureDbShape(JSON.parse(fs.readFileSync(dbPath,"utf8")));
+  // Always reset all presence to offline on server start — presence is only live state
+  for (const uid of Object.keys(loaded.presence||{})) {
+    loaded.presence[uid] = { status:"offline", lastSeenAt: loaded.presence[uid]?.lastSeenAt||now() };
+  }
+  return loaded;
 }
 
 function saveDb(db) { fs.writeFileSync(dbPath, JSON.stringify(ensureDbShape(db),null,2)); }
@@ -356,6 +362,13 @@ async function routeApi(req,res) {
     if (method==="POST" && url.pathname==="/api/typing") {
       for (const [uid,client] of clients) { if (uid!==user.id) sendEvent(client,"typing",{userId:user.id,at:now()}); }
       return json(res,200,{ok:true});
+    }
+
+    // ── CLEAR MESSAGES ──
+    if (method==="DELETE" && url.pathname==="/api/messages") {
+      db.messages = [];
+      audit(user.id,"messages:clear");
+      saveDb(db); broadcast(); return json(res,200,{ok:true});
     }
 
     // ── MESSAGES ──
@@ -753,12 +766,20 @@ async function routeApi(req,res) {
   }
 }
 
-// cleanup expired content
+// cleanup expired content + stale presence
 setInterval(()=>{
   const bm=db.messages.length, bs=db.stories.length;
   db.messages=db.messages.filter(m=>!m.expiresAt||Date.now()<new Date(m.expiresAt).getTime());
   db.stories=db.stories.filter(s=>!s.expiresAt||Date.now()<new Date(s.expiresAt).getTime());
-  if (db.messages.length!==bm||db.stories.length!==bs) { saveDb(db); broadcast(); }
+  // Mark users offline if no heartbeat in 65 seconds
+  let presenceChanged=false;
+  for (const [uid,p] of Object.entries(db.presence)) {
+    if (p.status==="online" && p.lastSeenAt && Date.now()-new Date(p.lastSeenAt).getTime()>65000) {
+      db.presence[uid]={status:"offline",lastSeenAt:p.lastSeenAt};
+      presenceChanged=true;
+    }
+  }
+  if (db.messages.length!==bm||db.stories.length!==bs||presenceChanged) { saveDb(db); broadcast(); }
 },15000);
 
 const server = http.createServer((req,res) => {
