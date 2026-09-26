@@ -6,6 +6,14 @@
       "displayName": "Me",
       "avatar": "/assests/ChatGPT Image May 14, 2026, 10_57_41 AM.png",
       "passwordHash": "752150fbec27ed5bf7a69e68b854fcee:2191be38d6e4abc7a8619266eb6b7511d76034ec8103a547cd18158b8b36af45",
+      "bio": "",
+      "birthday": "",
+      "favoriteColor": "",
+      "favoriteSong": "",
+      "favoriteFood": "",
+      "quote": "",
+      "loveLanguage": "",
+      "status": "",
       "createdAt": "2026-07-10T13:16:42.980Z"
     },
     {
@@ -14,6 +22,14 @@
       "displayName": "Partner",
       "avatar": "/assests/png (3)",
       "passwordHash": "4ef9f910405dee13bbe4e84e2db14e86:b0cff210fe1291a5a3a7070a67cc1064b8772478e837c2bfb5cfb1f66cc1150c",
+      "bio": "",
+      "birthday": "",
+      "favoriteColor": "",
+      "favoriteSong": "",
+      "favoriteFood": "",
+      "quote": "",
+      "loveLanguage": "",
+      "status": "",
       "createdAt": "2026-07-10T13:16:43.296Z"
     }
   ],
@@ -657,16 +673,7 @@
       "editedAt": null
     }
   ],
-  "stories": [
-    {
-      "id": "story_ea77badb-ca64-426c-894e-856d44d19f08",
-      "userId": "u_me",
-      "text": "money",
-      "views": [],
-      "createdAt": "2026-07-10T16:14:42.137Z",
-      "expiresAt": "2026-07-11T16:14:42.137Z"
-    }
-  ],
+  "stories": [],
   "presence": {
     "u_me": {
       "status": "online",
@@ -677,11 +684,34 @@
       "lastSeenAt": "2026-07-10T15:19:48.112Z"
     }
   },
+  "relationship": {
+    "startDate": null,
+    "milestones": []
+  },
+  "memories": [],
+  "journal": [],
+  "bucketList": [],
+  "songs": [],
+  "openWhen": [],
+  "moodEntries": [],
+  "loveNotes": [],
+  "dateIdeas": [],
+  "compliments": [],
+  "games": {
+    "sessions": [],
+    "stats": {}
+  },
+  "locations": [],
+  "dailyQuestions": [],
+  "notifications": [],
   "settings": {
     "appLockSetting": false,
     "screenshotAlerts": true,
     "hideMedia": false,
     "incognitoTyping": false,
+    "theme": "light",
+    "notificationsEnabled": true,
+    "loveNotifications": true,
     "keyFingerprint": "FA-34 3C 2A 62 C2 21 20 B4"
   },
   "audit": [
